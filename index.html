@@ -697,6 +697,56 @@ body {
       <div class="supp-check" id="chk-probiotic2"></div>
     </div>
   </div>
+
+  <!-- NEW PROBIOTIC FOODS CHECKLIST -->
+  <div class="card">
+    <div class="card-title">Probiotic Foods Checklist</div>
+    <div class="supp-row" onclick="toggleGutFood('kefir')">
+      <div class="supp-icon" style="background:var(--purple-dim)">🥛</div>
+      <div class="supp-info">
+        <div class="supp-name">Kefir</div>
+        <div class="supp-time">150ml daily (start with 50ml)</div>
+        <div class="supp-why">Most diverse probiotic food — 30+ strains</div>
+      </div>
+      <div class="supp-check" id="chk-kefir"></div>
+    </div>
+    <div class="supp-row" onclick="toggleGutFood('yoghurt')">
+      <div class="supp-icon" style="background:var(--purple-dim)">🫙</div>
+      <div class="supp-info">
+        <div class="supp-name">Live Greek Yoghurt</div>
+        <div class="supp-time">Daily with breakfast</div>
+        <div class="supp-why">Must say "live cultures" on label</div>
+      </div>
+      <div class="supp-check" id="chk-yoghurt"></div>
+    </div>
+    <div class="supp-row" onclick="toggleGutFood('kombucha')">
+      <div class="supp-icon" style="background:var(--purple-dim)">🍵</div>
+      <div class="supp-info">
+        <div class="supp-name">Kombucha</div>
+        <div class="supp-time">2-3 times per week</div>
+        <div class="supp-why">Low sugar variety (under 6g/100ml)</div>
+      </div>
+      <div class="supp-check" id="chk-kombucha"></div>
+    </div>
+    <div class="supp-row" onclick="toggleGutFood('miso')">
+      <div class="supp-icon" style="background:var(--purple-dim)">🍜</div>
+      <div class="supp-info">
+        <div class="supp-name">Miso</div>
+        <div class="supp-time">As soup or dressing</div>
+        <div class="supp-why">Great umami flavour</div>
+      </div>
+      <div class="supp-check" id="chk-miso"></div>
+    </div>
+    <div class="supp-row" onclick="toggleGutFood('cheese')">
+      <div class="supp-icon" style="background:var(--purple-dim)">🧀</div>
+      <div class="supp-info">
+        <div class="supp-name">Aged Cheese</div>
+        <div class="supp-time">Daily (cheddar, parmesan, gouda)</div>
+        <div class="supp-why">Contains live cultures</div>
+      </div>
+      <div class="supp-check" id="chk-cheese"></div>
+    </div>
+  </div>
   <div class="card">
     <div class="card-title">7-day consistency</div>
     <div id="consist-content"></div>
@@ -1129,8 +1179,19 @@ function renderCheck(key) {
   });
 }
 function renderConsistency() {
-  var keys=['multi','omega','thistle','mag','probiotic'];
-  var names={multi:'Multivitamin',omega:'Omega-3',thistle:'Milk thistle',mag:'Magnesium',probiotic:'Probiotic'};
+  var keys=['multi','omega','thistle','mag','probiotic','kefir','yoghurt','kombucha','miso','cheese'];
+  var names={
+    multi:'Multivitamin',
+    omega:'Omega-3',
+    thistle:'Milk thistle',
+    mag:'Magnesium',
+    probiotic:'Probiotic',
+    kefir:'Kefir',
+    yoghurt:'Live Yoghurt',
+    kombucha:'Kombucha',
+    miso:'Miso',
+    cheese:'Aged Cheese'
+  };
   var last7=[];
   for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);last7.push(d.toISOString().split('T')[0]);}
   var html='';
@@ -1142,6 +1203,28 @@ function renderConsistency() {
       '<div class="cb-pct">'+pct+'%</div></div>';
   });
   document.getElementById('consist-content').innerHTML=html;
+}
+
+// ── GUT FOODS CHECKLIST ──
+function toggleGutFood(key) {
+  var dk = TODAY + '_' + key;
+  D.supps[dk] = !D.supps[dk];
+  persist(D);
+  renderGutFoodCheck(key);
+}
+
+function renderGutFoodCheck(key) {
+  var done = D.supps[TODAY + '_' + key];
+  var el = document.getElementById('chk-' + key);
+  if (el) {
+    if (done) {
+      el.classList.add('done');
+      el.textContent = '✓';
+    } else {
+      el.classList.remove('done');
+      el.textContent = '';
+    }
+  }
 }
 
 // ── AF ──
@@ -1392,6 +1475,7 @@ function restoreToday() {
     if(entry.af!==undefined) document.getElementById('e-saved').style.display='block';
   }
   ['multi','omega','thistle','mag','probiotic'].forEach(renderCheck);
+  ['kefir','yoghurt','kombucha','miso','cheese'].forEach(renderGutFoodCheck);
 }
 
 
