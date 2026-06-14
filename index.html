@@ -6,8 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a1520">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
+<rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
+<rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
 <title>Health Coach</title>
 <style>
 :root {
@@ -1394,102 +1394,7 @@ function restoreToday() {
   ['multi','omega','thistle','mag','probiotic'].forEach(renderCheck);
 }
 
-function exportData() {
-  var entries = D.entries.slice().sort(function(a,b){return a.date.localeCompare(b.date);});
-  var suppKeys = ['multi','omega','thistle','mag'];
-  var suppNames = {multi:'Multivitamin',omega:'Omega-3',thistle:'Milk thistle phytosome',mag:'Magnesium'};
 
-  var lines = [];
-  lines.push('HEALTH COACH DATA EXPORT');
-  lines.push('Exported: ' + new Date().toDateString());
-  lines.push('Total days logged: ' + entries.length);
-  lines.push('');
-
-  // Summary stats
-  var withE = entries.filter(function(e){return e.energy;});
-  var withAF = entries.filter(function(e){return typeof e.af !== 'undefined';});
-  if (withE.length) {
-    var avgE = (withE.reduce(function(s,e){return s+e.energy;},0)/withE.length).toFixed(2);
-    var avgS = (withE.reduce(function(s,e){return s+(e.sleep||0);},0)/withE.length).toFixed(2);
-    lines.push('SUMMARY');
-    lines.push('Average energy score: ' + avgE + ' / 5');
-    lines.push('Average sleep score: ' + avgS + ' / 5');
-    var withGut = entries.filter(function(e){return e.gut;});
-    if(withGut.length) lines.push('Average gut score: ' + (withGut.reduce(function(s,e){return s+e.gut;},0)/withGut.length).toFixed(2) + ' / 5');
-  }
-  if (withAF.length) {
-    var afCount = withAF.filter(function(e){return e.af;}).length;
-    lines.push('Alcohol-free days: ' + afCount + ' of ' + withAF.length + ' logged (' + Math.round((afCount/withAF.length)*100) + '%)');
-    lines.push('Current AF streak: ' + calcStreak() + ' days');
-  }
-
-  // Supplement consistency
-  var allDates = entries.map(function(e){return e.date;});
-  if (allDates.length) {
-    lines.push('');
-    lines.push('SUPPLEMENT CONSISTENCY');
-    suppKeys.forEach(function(key){
-      var taken = allDates.filter(function(d){return D.supps[d+'_'+key];}).length;
-      var pct = Math.round((taken/allDates.length)*100);
-      lines.push(suppNames[key] + ': ' + taken + '/' + allDates.length + ' days (' + pct + '%)');
-    });
-  }
-
-  // Daily log
-  lines.push('');
-  lines.push('DAILY LOG');
-  entries.forEach(function(e){
-    var row = e.date;
-    if (e.energy) row += ' | Energy: ' + e.energy + '/5';
-    if (e.sleep) row += ' | Sleep: ' + e.sleep + '/5';
-    if (e.gut) row += ' | Gut: ' + e.gut + '/5';
-    if (typeof e.af !== 'undefined') row += ' | AF: ' + (e.af ? 'Yes' : 'No');
-    if (e.intention) row += ' | Priority: ' + e.intention;
-    if (e.wentWell) row += ' | Went well: ' + e.wentWell;
-    lines.push(row);
-  });
-
-  // Water
-  var waterDays = Object.keys(D.water);
-  if (waterDays.length) {
-    lines.push('');
-    lines.push('HYDRATION LOG');
-    waterDays.sort().forEach(function(d){
-      lines.push(d + ': ' + D.water[d] + '/8 glasses');
-    });
-  }
-
-  lines.push('');
-  lines.push('CONTEXT');
-  lines.push('User has spina bifida (ambulatory, no right ankle function). Chronic neurological fatigue and brain fog. Known gut issues: bloating and irregular digestion, likely related to vagus nerve involvement. Supplement stack: multivitamin, omega-3 (aiming for 2g+ EPA+DHA), milk thistle phytosome (Life Extension Advanced), magnesium before bed, probiotic being added. No fermented foods currently in diet. Goal: compound health improvements toward peak healthspan and productivity. Working to reduce alcohol. Gut health tracked daily 1-5.');
-  lines.push('');
-  lines.push('Please analyse my health data above. Identify patterns, correlations between variables, progress trends, and give me specific actionable recommendations to improve my energy, sleep, and overall healthspan. What should I focus on next?');
-
-  var text = lines.join('\n');
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function(){
-      var msg = document.getElementById('export-msg');
-      if (msg) { msg.style.display = 'block'; setTimeout(function(){ msg.style.display='none'; }, 4000); }
-    }).catch(function(){
-      fallbackCopy(text);
-    });
-  } else {
-    fallbackCopy(text);
-  }
-}
-
-function fallbackCopy(text) {
-  var ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed'; ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try { document.execCommand('copy'); } catch(e) {}
-  document.body.removeChild(ta);
-  var msg = document.getElementById('export-msg');
-  if (msg) { msg.style.display = 'block'; setTimeout(function(){ msg.style.display='none'; }, 4000); }
-}
 
 initHeader();
 setCoachMsg();
