@@ -6,7 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a1520">
-<title>Your Health Coach</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
+<title>Health Coach</title>
 <style>
 :root {
   --bg: #0a1520;
@@ -137,6 +139,7 @@ body {
 }
 .score-btn.sel-e { background:var(--green-dim); border-color:var(--green); color:var(--green); }
 .score-btn.sel-s { background:var(--blue-dim); border-color:var(--blue); color:var(--blue); }
+.score-btn.sel-g { background:var(--purple-dim); border-color:var(--purple); color:var(--purple); }
 
 /* ── TEXT INPUTS ── */
 .field-label { font-size:12px; color:var(--text2); margin-bottom:6px; }
@@ -387,6 +390,17 @@ body {
         <button class="score-btn" onclick="score('s',5)" id="s5">5</button>
       </div>
     </div>
+    <div class="score-row">
+      <div class="score-label">Gut</div>
+      <div class="score-btns">
+        <button class="score-btn" onclick="score('g',1)" id="g1">1</button>
+        <button class="score-btn" onclick="score('g',2)" id="g2">2</button>
+        <button class="score-btn" onclick="score('g',3)" id="g3">3</button>
+        <button class="score-btn" onclick="score('g',4)" id="g4">4</button>
+        <button class="score-btn" onclick="score('g',5)" id="g5">5</button>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin:-6px 0 12px 62px;">1 = bloating/discomfort &middot; 5 = settled and comfortable</div>
     <div class="field-wrap">
       <div class="field-label">Today's priority</div>
       <textarea class="field-input" id="intention" rows="2" placeholder="What needs your best thinking today?"></textarea>
@@ -400,8 +414,9 @@ body {
 <div id="screen-nutrition" class="screen">
 
   <div class="inner-tabs">
-    <button class="inner-tab active" onclick="nutTab('meals')">Today's meals</button>
-    <button class="inner-tab" onclick="nutTab('water')">Hydration</button>
+    <button class="inner-tab active" onclick="nutTab('meals')">Meals</button>
+    <button class="inner-tab" onclick="nutTab('gut')">Gut</button>
+    <button class="inner-tab" onclick="nutTab('water')">Water</button>
     <button class="inner-tab" onclick="nutTab('principles')">Principles</button>
   </div>
 
@@ -409,6 +424,143 @@ body {
   <div id="nut-meals" class="inner-panel active">
     <div class="nutrition-tip" id="nut-tip"></div>
     <div id="meals-content"></div>
+  </div>
+
+
+  <!-- GUT PANEL -->
+  <div id="nut-gut" class="inner-panel">
+    <div class="insight-card" style="background:var(--purple-dim);border-color:var(--purple-border);">
+      <div class="insight-label" style="color:var(--purple);">Why this matters for you</div>
+      <div class="insight-text">Your gut microbiome directly influences your brain fog and neurological fatigue via the gut-brain axis. With spina bifida, vagus nerve function can affect gut motility — explaining your bloating and irregular digestion. A healthier microbiome means better neurotransmitter production, reduced systemic inflammation, and more consistent energy.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Probiotic foods — options you'll enjoy</div>
+      <div class="principle-row">
+        <div class="principle-icon">🥛</div>
+        <div>
+          <div class="principle-title">Kefir (start here)</div>
+          <div class="principle-desc">Tastes like thin, slightly tangy yoghurt. 150ml per day in a smoothie or on its own. Contains 30+ bacterial strains — the most diverse probiotic food available. Start with 50ml and build up to avoid initial bloating.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🫙</div>
+        <div>
+          <div class="principle-title">Live Greek yoghurt daily</div>
+          <div class="principle-desc">Must say "live cultures" on the label. Activia, Fage, or Yeo Valley organic are good UK options. Take with breakfast — the food cushions the bacteria through stomach acid.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🧀</div>
+        <div>
+          <div class="principle-title">Aged cheese</div>
+          <div class="principle-desc">Mature cheddar, parmesan, and gouda all contain live cultures. Already in your diet probably — now you know it counts. Nothing to change, just reassuring.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🍵</div>
+        <div>
+          <div class="principle-title">Kombucha</div>
+          <div class="principle-desc">Fizzy, slightly sweet fermented tea. GT's Synergy or Equinox are widely available in UK supermarkets. One bottle, 2-3 times per week. Check sugar content — under 6g per 100ml.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🍜</div>
+        <div>
+          <div class="principle-title">Miso</div>
+          <div class="principle-desc">Stir a teaspoon into hot (not boiling) water for instant miso soup, or use as a marinade or dressing base. Mild savoury flavour — nothing like fermented vegetables. Adds umami to any dish.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Prebiotic foods — feed your good bacteria</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:12px;">Prebiotics are the fibre that feeds probiotic bacteria. Without prebiotics, probiotics don't thrive. These are more important than supplements.</div>
+      <div class="principle-row">
+        <div class="principle-icon">🧅</div>
+        <div>
+          <div class="principle-title">Garlic and onions daily</div>
+          <div class="principle-desc">Already in your meal plan. Both are rich in inulin — one of the best prebiotic fibres. Cooked is fine, raw is more potent. Use generously.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🌾</div>
+        <div>
+          <div class="principle-title">Oats every morning possible</div>
+          <div class="principle-desc">Beta-glucan in oats is a powerful prebiotic and also reduces cholesterol. Your overnight oats and porridge days are doing double duty.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🍌</div>
+        <div>
+          <div class="principle-title">Slightly underripe bananas</div>
+          <div class="principle-desc">Resistant starch content is highest before fully ripe. The greenish-yellow ones are better for your microbiome than the very ripe ones — though both are fine.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🫘</div>
+        <div>
+          <div class="principle-title">Lentils and legumes</div>
+          <div class="principle-desc">Already in your Thursday dinner. Aim for legumes 3-4 times per week. Start slowly if they increase bloating — this settles as your microbiome adapts.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🥦</div>
+        <div>
+          <div class="principle-title">Broccoli and asparagus</div>
+          <div class="principle-desc">Both are prebiotic and liver-supportive simultaneously — two benefits in one vegetable. Already in your meal plan for liver reasons, now doing gut work too.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recommended probiotic supplement</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:10px;">Given you have no fermented food in your current diet, a quality probiotic supplement will give your microbiome a meaningful jumpstart while you build food habits.</div>
+      <div class="supp-row" onclick="toggleSupp('probiotic')">
+        <div class="supp-icon" style="background:var(--purple-dim)">🦠</div>
+        <div class="supp-info">
+          <div class="supp-name">Probiotic (10+ billion CFU)</div>
+          <div class="supp-time">With breakfast — look for multi-strain with Lactobacillus and Bifidobacterium</div>
+          <div class="supp-why">UK options: Optibac Everyday, Symprove, or Bio-Kult. Take for 12 weeks minimum before assessing.</div>
+        </div>
+        <div class="supp-check" id="chk-probiotic"></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text3);line-height:1.5;">
+        💡 Initial bloating when starting a probiotic is normal and usually settles within 1-2 weeks as your microbiome adjusts. Start with a lower dose if needed.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Managing your bloating</div>
+      <div class="principle-row">
+        <div class="principle-icon">🍽️</div>
+        <div>
+          <div class="principle-title">Eat slowly, chew thoroughly</div>
+          <div class="principle-desc">Digestion begins in the mouth. Rushed eating is a primary cause of bloating — undigested food ferments in the gut. Aim for 20 chews per mouthful.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🚶</div>
+        <div>
+          <div class="principle-title">A short walk after meals</div>
+          <div class="principle-desc">Even 10 minutes walking after eating significantly improves gut motility — particularly relevant given vagus nerve involvement in your condition. This is one of the best things you can do for irregular digestion.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">💧</div>
+        <div>
+          <div class="principle-title">Water between meals, not during</div>
+          <div class="principle-desc">Large amounts of liquid with food dilute digestive enzymes. Drink your water between meals — a glass 30 mins before eating helps digestion without diluting it.</div>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-icon">🌿</div>
+        <div>
+          <div class="principle-title">Peppermint or ginger tea</div>
+          <div class="principle-desc">Both have clinical evidence for reducing bloating and improving gut motility. Peppermint tea after dinner is a simple, effective habit — and it replaces the desire for something sweet.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- WATER PANEL -->
@@ -480,6 +632,13 @@ body {
           <div class="principle-desc">Even one drink suppresses deep sleep by 20–30%, elevates neurological inflammation, and works directly against your milk thistle. Every alcohol-free day is a real gain.</div>
         </div>
       </div>
+      <div class="principle-row">
+        <div class="principle-icon">🦠</div>
+        <div>
+          <div class="principle-title">Feed your gut daily</div>
+          <div class="principle-desc">Live yoghurt, kefir, or kombucha provides probiotics. Garlic, oats, and onions provide the prebiotic fibre that feeds them. Both are needed — probiotics without prebiotics don't survive long.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -524,6 +683,18 @@ body {
         <div class="supp-why">Promotes deep sleep and muscle relaxation — consider upgrading to threonate for brain absorption</div>
       </div>
       <div class="supp-check" id="chk-mag"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Gut health supplement</div>
+    <div class="supp-row" onclick="toggleSupp('probiotic')">
+      <div class="supp-icon" style="background:var(--purple-dim)">🦠</div>
+      <div class="supp-info">
+        <div class="supp-name">Probiotic</div>
+        <div class="supp-time">With breakfast — multi-strain, 10+ billion CFU</div>
+        <div class="supp-why">Optibac Everyday, Symprove, or Bio-Kult — supports gut-brain axis and reduces bloating</div>
+      </div>
+      <div class="supp-check" id="chk-probiotic2"></div>
     </div>
   </div>
   <div class="card">
@@ -835,6 +1006,7 @@ function logWater(n) {
 
 // ── COACH MESSAGE ──
 var COACH_MSGS = [
+  "Your gut microbiome influences your brain fog directly via the gut-brain axis. Start with live Greek yoghurt daily — it's the simplest first step toward a healthier microbiome.",
   "Your liver responds quickly to milk thistle — that's a clear signal it's a key energy lever for you. Keep the phytosome timed with a fat-containing meal for best effect.",
   "Deep sleep is where neurological repair happens. Every alcohol-free evening and consistent bedtime directly improves how you feel the next day.",
   "Hydration check: brain fog is often dehydration in disguise. Eight glasses across the day, first one on waking.",
@@ -896,13 +1068,13 @@ function showScreen(name) {
 
 // ── INNER TABS ──
 function nutTab(name) {
-  ['meals','water','principles'].forEach(function(t){
+  ['meals','gut','water','principles'].forEach(function(t){
     document.getElementById('nut-'+t).classList.remove('active');
-    document.querySelectorAll('.inner-tab')[['meals','water','principles'].indexOf(t)].classList.remove('active');
   });
   document.getElementById('nut-'+name).classList.add('active');
   var tabs = document.querySelectorAll('#screen-nutrition .inner-tab');
-  tabs[['meals','water','principles'].indexOf(name)].classList.add('active');
+  tabs.forEach(function(t){t.classList.remove('active');});
+  tabs[['meals','gut','water','principles'].indexOf(name)].classList.add('active');
   if(name==='water') renderWater();
 }
 
@@ -919,12 +1091,11 @@ function eveTab(name) {
 // ── SCORES ──
 function score(type, val) {
   st[type]=val;
-  var prefix=type==='e'?'e':'s';
-  var cls=type==='e'?'sel-e':'sel-s';
+  var prefix=type==='e'?'e':type==='s'?'s':'g';
+  var cls=type==='e'?'sel-e':type==='s'?'sel-s':'sel-g';
   for(var i=1;i<=5;i++){
     var b=document.getElementById(prefix+i);
-    b.classList.remove('sel-e','sel-s');
-    if(i===val) b.classList.add(cls);
+    if(b){ b.classList.remove('sel-e','sel-s','sel-g'); if(i===val) b.classList.add(cls); }
   }
 }
 
@@ -933,6 +1104,7 @@ function saveMorning() {
   if(!st.e||!st.s){alert('Please rate your energy and sleep.');return;}
   var entry=getEntry(TODAY);
   entry.energy=st.e; entry.sleep=st.s;
+  if(st.g) entry.gut=st.g;
   entry.intention=document.getElementById('intention').value.trim();
   persist(D);
   document.getElementById('m-saved').style.display='block';
@@ -946,14 +1118,19 @@ function toggleSupp(key) {
   renderCheck(key);
 }
 function renderCheck(key) {
-  var el=document.getElementById('chk-'+key);
-  if(!el) return;
-  if(D.supps[TODAY+'_'+key]){el.classList.add('done');el.textContent='✓';}
-  else{el.classList.remove('done');el.textContent='';}
+  var done=D.supps[TODAY+'_'+key];
+  var ids=['chk-'+key];
+  if(key==='probiotic') ids.push('chk-probiotic2');
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el) return;
+    if(done){el.classList.add('done');el.textContent='✓';}
+    else{el.classList.remove('done');el.textContent='';}
+  });
 }
 function renderConsistency() {
-  var keys=['multi','omega','thistle','mag'];
-  var names={multi:'Multivitamin',omega:'Omega-3',thistle:'Milk thistle',mag:'Magnesium'};
+  var keys=['multi','omega','thistle','mag','probiotic'];
+  var names={multi:'Multivitamin',omega:'Omega-3',thistle:'Milk thistle',mag:'Magnesium',probiotic:'Probiotic'};
   var last7=[];
   for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);last7.push(d.toISOString().split('T')[0]);}
   var html='';
@@ -1044,16 +1221,20 @@ function renderTrends() {
       '<div class="hist-row">' +
       (e.energy?'<span class="hist-score">⚡ '+e.energy+'/5</span>':'') +
       (e.sleep?'<span class="hist-score">😴 '+e.sleep+'/5</span>':'') +
+      (e.gut?'<span class="hist-score">🦠 '+e.gut+'/5</span>':'') +
       afHtml+'</div>' +
       (e.intention?'<div class="hist-intent">'+e.intention+'</div>':'')+
       '</div>';
   });
 
+  var withG=entries.filter(function(e){return e.gut;});
+  var last7g=withG.slice(0,7);
+  var avgG=last7g.length?(last7g.reduce(function(s,e){return s+e.gut;},0)/last7g.length).toFixed(1):'—';
   var html='<div class="metrics-grid">' +
     '<div class="metric-card"><div class="metric-val" style="color:var(--green)">'+avgE+'</div><div class="metric-label">Avg energy (7d)</div></div>' +
     '<div class="metric-card"><div class="metric-val" style="color:var(--blue)">'+avgS+'</div><div class="metric-label">Avg sleep (7d)</div></div>' +
+    '<div class="metric-card"><div class="metric-val" style="color:var(--purple)">'+avgG+'</div><div class="metric-label">Avg gut (7d)</div></div>' +
     '<div class="metric-card"><div class="metric-val" style="color:var(--green)">'+streak+'</div><div class="metric-label">AF day streak</div></div>' +
-    '<div class="metric-card"><div class="metric-val" style="color:var(--amber)">'+afDays+'/'+last7af.length+'</div><div class="metric-label">AF days (7d)</div></div>' +
     '</div>';
   html+='<div class="card"><div class="card-title">Last 7 days</div><div style="padding-top:4px;">'+chartHtml+'</div></div>';
   if(insight) html+='<div class="insight-card"><div class="insight-label">Pattern insight</div><div class="insight-text">'+insight+'</div></div>';
@@ -1202,6 +1383,7 @@ function restoreToday() {
   if(entry){
     if(entry.energy) score('e',entry.energy);
     if(entry.sleep) score('s',entry.sleep);
+    if(entry.gut) score('g',entry.gut);
     if(entry.intention) document.getElementById('intention').value=entry.intention;
     if(entry.energy) document.getElementById('m-saved').style.display='block';
     if(typeof entry.af!=='undefined'){setAF(entry.af);}
@@ -1209,7 +1391,7 @@ function restoreToday() {
     if(entry.tomorrow) document.getElementById('tomorrow').value=entry.tomorrow;
     if(entry.af!==undefined) document.getElementById('e-saved').style.display='block';
   }
-  ['multi','omega','thistle','mag'].forEach(renderCheck);
+  ['multi','omega','thistle','mag','probiotic'].forEach(renderCheck);
 }
 
 function exportData() {
@@ -1232,6 +1414,8 @@ function exportData() {
     lines.push('SUMMARY');
     lines.push('Average energy score: ' + avgE + ' / 5');
     lines.push('Average sleep score: ' + avgS + ' / 5');
+    var withGut = entries.filter(function(e){return e.gut;});
+    if(withGut.length) lines.push('Average gut score: ' + (withGut.reduce(function(s,e){return s+e.gut;},0)/withGut.length).toFixed(2) + ' / 5');
   }
   if (withAF.length) {
     var afCount = withAF.filter(function(e){return e.af;}).length;
@@ -1258,6 +1442,7 @@ function exportData() {
     var row = e.date;
     if (e.energy) row += ' | Energy: ' + e.energy + '/5';
     if (e.sleep) row += ' | Sleep: ' + e.sleep + '/5';
+    if (e.gut) row += ' | Gut: ' + e.gut + '/5';
     if (typeof e.af !== 'undefined') row += ' | AF: ' + (e.af ? 'Yes' : 'No');
     if (e.intention) row += ' | Priority: ' + e.intention;
     if (e.wentWell) row += ' | Went well: ' + e.wentWell;
@@ -1276,7 +1461,7 @@ function exportData() {
 
   lines.push('');
   lines.push('CONTEXT');
-  lines.push('User has spina bifida (ambulatory, no right ankle function). Chronic neurological fatigue and brain fog. Supplement stack: multivitamin, omega-3 (aiming for 2g+ EPA+DHA), milk thistle phytosome (Life Extension Advanced), magnesium before bed. Goal: compound health improvements toward peak healthspan and productivity. Working to reduce alcohol.');
+  lines.push('User has spina bifida (ambulatory, no right ankle function). Chronic neurological fatigue and brain fog. Known gut issues: bloating and irregular digestion, likely related to vagus nerve involvement. Supplement stack: multivitamin, omega-3 (aiming for 2g+ EPA+DHA), milk thistle phytosome (Life Extension Advanced), magnesium before bed, probiotic being added. No fermented foods currently in diet. Goal: compound health improvements toward peak healthspan and productivity. Working to reduce alcohol. Gut health tracked daily 1-5.');
   lines.push('');
   lines.push('Please analyse my health data above. Identify patterns, correlations between variables, progress trends, and give me specific actionable recommendations to improve my energy, sleep, and overall healthspan. What should I focus on next?');
 
