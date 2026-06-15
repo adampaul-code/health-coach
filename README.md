@@ -9,15 +9,16 @@ It focuses on the things that actually move the needle for you:
 - Your supplement stack (especially milk thistle)
 - Steady nutrition without overcomplicating things
 
-Everything lives in **one HTML file**. No accounts, no internet required after saving it, and all your data stays private on your device.
+Everything lives in **one HTML file**. It now supports optional cloud sync via Supabase so your data is backed up and available across devices (phone + laptop).
 
 ## How to Use
 
 1. Download `index.html`
 2. Open it in any browser (Chrome, Safari, Firefox, Edge)
-3. It works completely offline
+3. Sign in with email + password (you only need to do this once per device)
+4. Start logging — your data will sync to the cloud
 
-That's it.
+It also works offline and syncs when you're back online.
 
 ### Daily Flow (takes ~1–2 minutes)
 
@@ -53,31 +54,34 @@ That's it.
 
 ## Privacy & Data
 
-- All data is stored locally in your browser using `localStorage`.
-- Nothing is sent to any server.
-- Close the tab or delete the file and your data is gone.
-- You can export everything anytime.
+- Your data is stored in **Supabase** (secure cloud database) + a local copy on your device.
+- You sign in with email + password (only needed once per device).
+- Data syncs automatically across devices when you're online.
+- You remain in full control — you can sign out or delete your account anytime.
 
 ## Resetting Your Data
 
-Open the app and type this in the browser console (F12 → Console tab):
+To clear local data, open the browser console (F12) and run:
 
 ```js
-localStorage.removeItem('hc_v4');
+localStorage.removeItem('hc_v5');
 location.reload();
 ```
 
+To fully delete your cloud data, sign in at [supabase.com](https://supabase.com) and delete your account or the data in the `health_data` table.
+
 ## Why This Version?
 
-This is a refined hybrid that keeps things **quick to use every day** while still giving you useful insights. It has a calm dark interface, strong but not overwhelming personalisation, and makes it easy to see the connection between your habits (especially alcohol-free days and probiotic foods) and how you feel.
+This version adds **Supabase cloud sync** so your data is safely backed up and available on all your devices. It keeps the calm interface and quick daily use while giving you reliable data persistence across phone and computer.
 
 ## Tech
 
 - Single self-contained HTML file
+- Uses Supabase for secure cloud data storage and cross-device sync
 - Tailwind CSS via CDN + custom dark theme
-- No build step, no frameworks, no dependencies
+- No build step required
 
-Perfect for personal use or lightweight sharing.
+Perfect for personal use with optional cloud sync.
 
 ---
 
