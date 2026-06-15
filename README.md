@@ -1,108 +1,84 @@
-# Health Coach — Simple Energy-Focused Web App
+# Health Coach
 
-This is a **very simple**, beginner-friendly web app designed to help you maximise your daily energy.
+A simple, calm, single-file web app to help you build better daily energy.
 
-It respects the things that matter to you:
-- Good sleep and movement
-- Supporting your gut microbiome with foods you actually like
-- Taking your regular supplements (Omega 3, Milk thistle, Multi-vitamin, Magnesium)
-- Alcohol-free days (framed positively as a way to have more energy for recovery)
+It focuses on the things that actually move the needle for you:
+- Sleep quality and consistency
+- Alcohol-free days
+- Gut support through real food
+- Your supplement stack (especially milk thistle)
+- Steady nutrition without overcomplicating things
 
-Everything lives in **one file**. No accounts, no internet required after you save it, and your data stays private on your own computer.
+Everything lives in **one HTML file**. No accounts, no internet required after saving it, and all your data stays private on your device.
 
-## How to Open and Use It (Super Easy)
+## How to Use
 
-1. Open the folder called **HealthCoach**
-2. Double-click the file `index.html`
-3. It will open in your web browser (Chrome, Safari, Edge, Firefox — any of them work)
+1. Download `index.html`
+2. Open it in any browser (Chrome, Safari, Firefox, Edge)
+3. It works completely offline
 
-That's it. No installation needed.
+That's it.
 
-### Using the App Every Day
-- **Dashboard** shows your Energy Score for today (out of 100) + 4 quick summary cards + quick supplements progress.
-- Tap **Log Today** to answer a few simple questions:
-  - Sleep hours + quality
-  - How much you moved
-  - Which gut-friendly foods you ate (tick the ones that apply)
-  - Which of your supplements you took
-  - Whether last night was alcohol-free (Yes = 0 drinks)
-- Hit **Save log**
-- Go back to Dashboard — your new score and summaries appear instantly.
-- **Nutrition** tab: Breakfast, lunch, and dinner ideas built around your exact gut foods + all your core principles (oily fish 3x/week examples, colour on every plate, protein at every meal, liver friendly, slow carbs, fat with supplements, alcohol as biggest lever, feed gut daily). One-tap "Add these foods to today's log".
-- **Reminders** tab: Clean checklist for Omega 3, Milk thistle, Multi-vitamin, and Magnesium with benefit notes + reminder to take with fat. Check them here (syncs with the Log form). Big "Mark all as taken" button. Also visible as quick progress on the Dashboard.
-- Check **History** to see the last several days and one simple observation the app makes (often highlighting alcohol-free days or daily gut feeding as big energy movers).
+### Daily Flow (takes ~1–2 minutes)
 
-The app remembers everything automatically.
+- **Morning**: Rate your Energy, Sleep, and Gut feel (1–5), then set your priority for the day.
+- **Nutrition tab**: 
+  - See today’s meal suggestions with clear reasons why they help your energy.
+  - Log water intake by tapping the glasses.
+  - Check the Gut section for practical probiotic & prebiotic advice.
+- **Supplements**: Quickly tick off what you’ve taken (Multivitamin, Omega-3, Milk thistle, Magnesium). See your 7-day consistency.
+- **Evening**: Log whether the day was alcohol-free, note one thing that went well, and set tomorrow’s priority. Optional: view a personalised wind-down routine.
+- **Trends**: See your patterns over time, including average probiotic foods logged.
 
-## Your Core Principles (the app is built around these)
-These are the specific principles you liked from previous versions. The Nutrition suggestions, tips, observations, and scoring are all designed to support them:
+## Key Features
 
-- **Oily fish 3x per week** — Salmon, sardines, mackerel etc. for natural omega-3 and liver support.
-- **Colour on every plate** — Berries, greens, varied vegetables for polyphenols and gut microbiome diversity.
-- **Protein at every meal** — Keeps energy stable and supports muscle/recovery.
-- **Liver friendly choices** — Easy to digest meals that pair well with milk thistle.
-- **Slow carbs, not no carbs** — Oats, beans, etc. for sustained energy + feeding your gut.
-- **Take supplements with fat** — Avocado, olive oil, nuts, oily fish or aged cheese dramatically improves absorption of Omega 3 and fat-soluble vitamins.
-- **Alcohol is the biggest lever** — The single biggest impact on daily energy, gut health, liver, and overnight recovery. Alcohol-free nights are celebrated throughout the app.
-- **Feed your gut daily** — Different plants + fermented foods (from your approved list) every single day.
+- **Daily rotating meal plans** — Breakfast, lunch and dinner suggestions that rotate automatically, with explanations tied to energy, liver support, and gut health.
+- **Probiotic foods checklist** — Track Live Greek yoghurt, Aged cheese, Kombucha, and Miso. Your progress also appears in the Trends view.
+- **Water tracker** — Simple tap-to-log glasses (goal: 8 per day).
+- **Sleep wind-down routine** — Customisable based on your target bedtime.
+- **Trends & insights** — See what’s actually working (especially the impact of alcohol-free days and probiotic intake).
+- **Export your data** — One-click copy of your logs to paste into Claude or another AI for deeper analysis.
+- **Dark, calm interface** — Designed to feel good to use morning and evening.
 
-The Energy Score rewards sleep, movement, gut foods logged, supplements taken, and especially alcohol-free days.
+## Your Core Principles (built into the app)
 
-## What the Energy Score Means (Simple Explanation)
-Higher number = better combination of things that give you energy.
+- Oily fish ~3× per week
+- Colour on every plate
+- Protein at every meal
+- Liver-friendly choices (pairs well with milk thistle)
+- Slow carbs for sustained energy
+- Take supplements with fat for better absorption
+- Alcohol is the biggest lever for energy and recovery
+- Feed your gut daily with probiotic + prebiotic foods
 
-The app gives points for:
-- Sleep (biggest factor — poor sleep kills energy)
-- Movement
-- Gut-friendly foods (these help your microbiome turn food into usable energy)
-- Your supplements (you already take them to support energy systems)
-- Alcohol-free nights (big positive bonus because your body can focus energy on repair and recovery instead)
+## Privacy & Data
 
-It is intentionally simple and transparent.
+- All data is stored locally in your browser using `localStorage`.
+- Nothing is sent to any server.
+- Close the tab or delete the file and your data is gone.
+- You can export everything anytime.
 
-## Gut Foods Included
-(Chosen based on what you said you like — no kimchi or sauerkraut):
-- Banana or apple
-- Oats or beans
-- Berries
-- Garlic or onion
-- Leafy greens
-- Kefir, kombucha or miso
-- Aged cheese
+## Resetting Your Data
 
-## Supplements Tracked
-- Omega 3
-- Milk thistle
-- Multi-vitamin
-- Magnesium
+Open the app and type this in the browser console (F12 → Console tab):
 
-## Alcohol-Free Days
-The question is worded gently: "Was last night alcohol-free?"  
-Choosing "Yes" gives a recovery/energy bonus and a positive note like:  
-"Alcohol-free nights help your body put more energy into recovery and gut balance."
+```js
+localStorage.removeItem('hc_v4');
+location.reload();
+```
 
-This is the subtle encouragement built in — no lectures, just facts about energy.
+## Why This Version?
 
-## Tips for Getting the Most Out of It
-- Log most days (even roughly) — patterns appear after 7–10 days.
-- Look at the History tab occasionally to see what actually moves your energy numbers.
-- You can open the file on your phone or computer.
+This is a refined hybrid that keeps things **quick to use every day** while still giving you useful insights. It has a calm dark interface, strong but not overwhelming personalisation, and makes it easy to see the connection between your habits (especially alcohol-free days and probiotic foods) and how you feel.
 
-## For Curious Beginners — How to Experiment Later
-If you ever want to tweak it:
-- Right-click `index.html` → "Open with" → any text editor (TextEdit on Mac, Notepad on Windows, or VS Code).
-- The code has comments in the JavaScript part explaining the scoring.
-- You can add/remove foods in the list near the top of the code, change point values, etc.
-- To completely reset your data, open the app and type this in the browser console (F12):  
-  `HealthCoach.reset()`
+## Tech
 
-## Privacy
-All your logs are saved only in your browser using something called localStorage.  
-Nothing is sent anywhere. Close the tab or delete the folder and the data is gone.
+- Single self-contained HTML file
+- Tailwind CSS via CDN + custom dark theme
+- No build step, no frameworks, no dependencies
 
-## That's the whole app
-It does one job well: helps you see the connection between sleep, movement, gut support, your supplements, alcohol-free nights — and how energetic you feel.
+Perfect for personal use or lightweight sharing.
 
-Open it, log a couple of days, and see how it feels.
+---
 
-Enjoy the energy gains!
+Built to help you protect and improve your daily energy through small, consistent actions. Open it, log a few days, and see what the data shows you.
