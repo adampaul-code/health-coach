@@ -6,8 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a1520">
-
-
+<rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
+<rect width='100' height='100' rx='22' fill='%230a1520'/><text y='.9em' font-size='72' x='12'>🧬</text></svg>">
 <title>Health Coach</title>
 <style>
 :root {
@@ -519,7 +519,7 @@ body {
       <div class="supp-row" onclick="toggleSupp('probiotic')">
         <div class="supp-icon" style="background:var(--purple-dim)">🦠</div>
         <div class="supp-info">
-          <div class="supp-name">Probiotic (10+ billion CFU)</div>
+          <div class="supp-name">Probiotic (5–10+ billion CFU)</div>
           <div class="supp-time">With breakfast — look for multi-strain with Lactobacillus and Bifidobacterium</div>
           <div class="supp-why">UK options: Optibac Everyday, Symprove, or Bio-Kult. Take for 12 weeks minimum before assessing.</div>
         </div>
@@ -559,43 +559,6 @@ body {
           <div class="principle-title">Peppermint or ginger tea</div>
           <div class="principle-desc">Both have clinical evidence for reducing bloating and improving gut motility. Peppermint tea after dinner is a simple, effective habit — and it replaces the desire for something sweet.</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Probiotic Foods Checklist -->
-    <div class="card">
-      <div class="card-title">Probiotic Foods Checklist (tap to check off)</div>
-      <div class="supp-row" onclick="toggleProbioticFood('kefir')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🥛</div>
-        <div class="supp-info">
-          <div class="supp-name">Kefir</div>
-          <div class="supp-time">150ml daily</div>
-        </div>
-        <div class="supp-check" id="chk-kefir"></div>
-      </div>
-      <div class="supp-row" onclick="toggleProbioticFood('yoghurt')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🫙</div>
-        <div class="supp-info">
-          <div class="supp-name">Live Greek Yoghurt</div>
-          <div class="supp-time">Daily with breakfast</div>
-        </div>
-        <div class="supp-check" id="chk-yoghurt"></div>
-      </div>
-      <div class="supp-row" onclick="toggleProbioticFood('kombucha')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🍵</div>
-        <div class="supp-info">
-          <div class="supp-name">Kombucha</div>
-          <div class="supp-time">2-3 times per week</div>
-        </div>
-        <div class="supp-check" id="chk-kombucha"></div>
-      </div>
-      <div class="supp-row" onclick="toggleProbioticFood('miso')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🍜</div>
-        <div class="supp-info">
-          <div class="supp-name">Miso</div>
-          <div class="supp-time">As soup or dressing</div>
-        </div>
-        <div class="supp-check" id="chk-miso"></div>
       </div>
     </div>
   </div>
@@ -1437,29 +1400,6 @@ initHeader();
 setCoachMsg();
 restoreToday();
 renderSleepRoutine();
-
-// Probiotic Foods Checklist Functions
-function toggleProbioticFood(key) {
-  var dk = TODAY + '_profood_' + key;
-  if (!D.supps) D.supps = {};
-  D.supps[dk] = !D.supps[dk];
-  persist(D);
-  renderProbioticFoodCheck(key);
-}
-
-function renderProbioticFoodCheck(key) {
-  var done = D.supps[TODAY + '_profood_' + key];
-  var el = document.getElementById('chk-' + key);
-  if (el) {
-    if (done) {
-      el.classList.add('done');
-      el.textContent = '✓';
-    } else {
-      el.classList.remove('done');
-      el.textContent = '';
-    }
-  }
-}
 </script>
 </body>
 </html>
