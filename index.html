@@ -505,29 +505,56 @@ function hideAuth(){
 }
 
 async function signIn(){
-  var email=document.getElementById('auth-email').value.trim();
-  var pw=document.getElementById('auth-password').value;
+  var emailEl=document.getElementById('auth-email');
+  var pwEl=document.getElementById('auth-password');
   var errEl=document.getElementById('auth-error');
   errEl.style.display='none';
-  if(!email||!pw){errEl.textContent='Please enter email and password.';errEl.style.display='block';return;}
-  var res=await sb.auth.signInWithPassword({email:email,password:pw});
-  if(res.error){errEl.textContent=res.error.message;errEl.style.display='block';return;}
-  currentUser=res.data.user;
-  await loadFromCloud();
-  hideAuth();
+  if(!emailEl||!pwEl){errEl.textContent='Page not loaded correctly — please refresh.';errEl.style.display='block';return;}
+  var email=emailEl.value.trim();
+  var pw=pwEl.value;
+  if(!email||!pw){errEl.textContent='Please enter your email and password.';errEl.style.display='block';return;}
+  if(!sb){errEl.textContent='Still connecting — please wait a moment and try again.';errEl.style.display='block';return;}
+  errEl.textContent='Signing in…';errEl.style.color='var(--blue)';errEl.style.display='block';
+  try{
+    var res=await sb.auth.signInWithPassword({email:email,password:pw});
+    if(res.error){errEl.textContent=res.error.message;errEl.style.color='#e05c5c';errEl.style.display='block';return;}
+    currentUser=res.data.user;
+    await loadFromCloud();
+    hideAuth();
+  }catch(e){
+    errEl.textContent='Connection error: '+e.message;errEl.style.color='#e05c5c';errEl.style.display='block';
+  }
 }
 
 async function signUp(){
-  var email=document.getElementById('auth-email').value.trim();
-  var pw=document.getElementById('auth-password').value;
+  var emailEl=document.getElementById('auth-email');
+  var pwEl=document.getElementById('auth-password');
   var errEl=document.getElementById('auth-error');
   errEl.style.display='none';
-  if(!email||!pw){errEl.textContent='Please enter email and password.';errEl.style.display='block';return;}
-  if(pw.length<6){errEl.textContent='Password must be at least 6 characters.';errEl.style.display='block';return;}
-  var res=await sb.auth.signUp({email:email,password:pw});
-  if(res.error){errEl.textContent=res.error.message;errEl.style.display='block';return;}
-  errEl.style.display='none';
-  alert('Account created! You can sign in now. (Check your email to confirm if required.)');
+  if(!emailEl||!pwEl){errEl.textContent='Page not loaded correctly — please refresh.';errEl.style.display='block';return;}
+  var email=emailEl.value.trim();
+  var pw=pwEl.value;
+  if(!email||!pw){errEl.textContent='Please enter your email and a password.';errEl.style.display='block';return;}
+  if(pw.length<6){errEl.textContent='Password must be at least 6 characters.';errEl.style.color='#e05c5c';errEl.style.display='block';return;}
+  if(!sb){errEl.textContent='Still connecting — please wait a moment and try again.';errEl.style.display='block';return;}
+  errEl.textContent='Creating account…';errEl.style.color='var(--blue)';errEl.style.display='block';
+  try{
+    var res=await sb.auth.signUp({email:email,password:pw});
+    if(res.error){errEl.textContent=res.error.message;errEl.style.color='#e05c5c';errEl.style.display='block';return;}
+    if(res.data&&res.data.user&&res.data.user.id){
+      currentUser=res.data.user;
+      errEl.textContent='Account created — signing you in…';errEl.style.color='var(--green)';
+      setTimeout(async function(){
+        var signInRes=await sb.auth.signInWithPassword({email:email,password:pw});
+        if(!signInRes.error){currentUser=signInRes.data.user;await loadFromCloud();hideAuth();}
+        else{errEl.textContent='Account created! Please sign in now.';errEl.style.color='var(--green)';}
+      },1000);
+    } else {
+      errEl.textContent='Check your email to confirm your account, then sign in.';errEl.style.color='var(--green)';errEl.style.display='block';
+    }
+  }catch(e){
+    errEl.textContent='Connection error: '+e.message;errEl.style.color='#e05c5c';errEl.style.display='block';
+  }
 }
 
 async function logout(){
