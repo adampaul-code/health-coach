@@ -161,11 +161,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-
     <div class="auth-logo">🧬</div>
     <div class="auth-title">Health Coach</div>
     <div class="auth-sub">Sign in to sync your data across all your devices</div>
-    <input type="email" id="auth-email" class="auth-input" placeholder="Email address" autocomplete="email">
-    <input type="password" id="auth-password" class="auth-input" placeholder="Password" autocomplete="current-password">
+    <input type="email" id="auth-email" class="auth-input" placeholder="Email address" autocomplete="email" style="font-size:16px;">
+    <input type="password" id="auth-password" class="auth-input" placeholder="Password (min 6 characters)" autocomplete="current-password" style="font-size:16px;">
     <div class="auth-error" id="auth-error"></div>
     <button class="btn-primary" onclick="signIn()">Sign In</button>
     <button class="btn-secondary" onclick="signUp()">Create Account</button>
+    <button onclick="runDiagnostic()" style="margin-top:10px;width:100%;padding:10px;background:transparent;border:1px solid #333;color:#4d6a85;border-radius:8px;font-size:12px;cursor:pointer;">Run diagnostic</button>
+    <div id="diag-output" style="font-size:11px;color:#8fa8c0;margin-top:10px;line-height:1.7;word-break:break-all;display:none;"></div>
     <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:14px;line-height:1.6;">Your health data is encrypted and private. Only you can access it.</div>
   </div>
 </div>
@@ -964,6 +966,20 @@ function initApp(){
   updateHeader();
   restoreToday();
   renderSleepRoutine();
+}
+
+function runDiagnostic(){
+  var out=document.getElementById('diag-output');
+  out.style.display='block';
+  var lines=[];
+  lines.push('Email field: '+(document.getElementById('auth-email')?'OK':'MISSING'));
+  lines.push('Password field: '+(document.getElementById('auth-password')?'OK':'MISSING'));
+  lines.push('Email value: "'+( document.getElementById('auth-email')?document.getElementById('auth-email').value:'n/a')+'"');
+  lines.push('window.supabase: '+(typeof window.supabase));
+  lines.push('sb client: '+(sb?'ready':'null'));
+  lines.push('Page protocol: '+window.location.protocol);
+  lines.push('CDN loaded: '+(typeof window.supabase!=='undefined'?'yes':'NO - this is the problem'));
+  out.innerHTML=lines.join('<br>');
 }
 
 window.onload=function(){
