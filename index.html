@@ -1075,41 +1075,46 @@
                 <div class="insight-text">Your gut microbiome directly influences your brain fog and neurological fatigue via the gut-brain axis. With spina bifida, vagus nerve function can affect gut motility — explaining your bloating and irregular digestion. A healthier microbiome means better neurotransmitter production, reduced systemic inflammation, and more consistent energy.</div>
             </div>
             <div class="card">
-                <div class="card-title">Probiotic foods you'll enjoy</div>
-                <div class="principle-row">
+                <div class="card-title">Probiotic foods — tick what you had today</div>
+                <div class="principle-row" onclick="toggleGut('kefir')" style="cursor:pointer;">
                     <div class="principle-icon">🥛</div>
-                    <div>
-                        <div class="principle-title">Kefir (start here)</div>
-                        <div class="principle-desc">Tastes like thin, slightly tangy yoghurt. 150ml per day. Contains 30+ bacterial strains. Start with 50ml and build up.</div>
+                    <div style="flex:1;">
+                        <div class="principle-title">Kefir</div>
+                        <div class="principle-desc">150ml per day — 30+ bacterial strains. Start with 50ml and build up.</div>
                     </div>
+                    <div class="supp-check" id="gut-kefir"></div>
                 </div>
-                <div class="principle-row">
+                <div class="principle-row" onclick="toggleGut('yoghurt')" style="cursor:pointer;">
                     <div class="principle-icon">🫙</div>
-                    <div>
-                        <div class="principle-title">Live Greek yoghurt daily</div>
-                        <div class="principle-desc">Must say "live cultures" on the label. Activia, Fage, or Yeo Valley organic are good UK options.</div>
+                    <div style="flex:1;">
+                        <div class="principle-title">Live Greek yoghurt</div>
+                        <div class="principle-desc">Must say "live cultures" — Activia, Fage, or Yeo Valley organic.</div>
                     </div>
+                    <div class="supp-check" id="gut-yoghurt"></div>
                 </div>
-                <div class="principle-row">
+                <div class="principle-row" onclick="toggleGut('cheese')" style="cursor:pointer;">
                     <div class="principle-icon">🧀</div>
-                    <div>
+                    <div style="flex:1;">
                         <div class="principle-title">Aged cheese</div>
-                        <div class="principle-desc">Mature cheddar, parmesan, and gouda all contain live cultures. Already in your diet probably — now you know it counts.</div>
+                        <div class="principle-desc">Mature cheddar, parmesan, gouda — all contain live cultures.</div>
                     </div>
+                    <div class="supp-check" id="gut-cheese"></div>
                 </div>
-                <div class="principle-row">
+                <div class="principle-row" onclick="toggleGut('kombucha')" style="cursor:pointer;">
                     <div class="principle-icon">🍵</div>
-                    <div>
+                    <div style="flex:1;">
                         <div class="principle-title">Kombucha</div>
-                        <div class="principle-desc">Fizzy, slightly sweet fermented tea. GT's Synergy or Equinox widely available in UK supermarkets. Check sugar — under 6g per 100ml.</div>
+                        <div class="principle-desc">GT's Synergy or Equinox — check sugar under 6g per 100ml.</div>
                     </div>
+                    <div class="supp-check" id="gut-kombucha"></div>
                 </div>
-                <div class="principle-row">
+                <div class="principle-row" onclick="toggleGut('miso')" style="cursor:pointer;border-bottom:none;">
                     <div class="principle-icon">🍜</div>
-                    <div>
+                    <div style="flex:1;">
                         <div class="principle-title">Miso</div>
-                        <div class="principle-desc">Stir a teaspoon into hot (not boiling) water. Mild savoury flavour — nothing like fermented vegetables.</div>
+                        <div class="principle-desc">A teaspoon in hot water — mild savoury flavour, nothing like fermented veg.</div>
                     </div>
+                    <div class="supp-check" id="gut-miso"></div>
                 </div>
             </div>
             <div class="card">
@@ -2473,16 +2478,26 @@
 
     function nutTab(name) {
         ['meals', 'gut', 'water', 'principles'].forEach(function(t) {
-            document.getElementById('nut-' + t).classList.remove('active');
+            var el = document.getElementById('nut-' + t);
+            if (el)
+                el.classList.remove('active');
         });
-        document.getElementById('nut-' + name).classList.add('active');
+        var target = document.getElementById('nut-' + name);
+        if (target)
+            target.classList.add('active');
         var tabs = document.querySelectorAll('#screen-nutrition .inner-tab');
         tabs.forEach(function(t) {
             t.classList.remove('active');
         });
-        tabs[['meals', 'gut', 'water', 'principles'].indexOf(name)].classList.add('active');
+        var idx = ['meals', 'gut', 'water', 'principles'].indexOf(name);
+        if (tabs[idx])
+            tabs[idx].classList.add('active');
         if (name === 'water')
             renderWater();
+        if (name === 'meals')
+            renderMeals();
+        if (name === 'gut')
+            renderGutChecks();
     }
 
     function eveTab(name) {
@@ -2528,6 +2543,7 @@
                 document.getElementById('e-saved').style.display = 'block';
         }
         ['multi', 'omega', 'thistle', 'mag', 'probiotic'].forEach(renderCheck);
+        renderGutChecks();
     }
 
     // ── INIT ──
@@ -2553,6 +2569,34 @@
         lines.push('Page protocol: ' + window.location.protocol);
         lines.push('CDN loaded: ' + (typeof window.supabase !== 'undefined' ? 'yes' : 'NO - this is the problem'));
         out.innerHTML = lines.join('<br>');
+    }
+
+    function toggleGut(key) {
+        var dk = TODAY + '_gut_' + key;
+        if (!D.supps)
+            D.supps = {};
+        D.supps[dk] = !D.supps[dk];
+        persist();
+        renderGutCheck(key);
+    }
+
+    function renderGutCheck(key) {
+        var done = D.supps && D.supps[TODAY + '_gut_' + key];
+        var el = document.getElementById('gut-' + key);
+        if (!el)
+            return;
+        if (done) {
+            el.classList.add('done');
+            el.textContent = '✓';
+        }
+        else {
+            el.classList.remove('done');
+            el.textContent = '';
+        }
+    }
+
+    function renderGutChecks() {
+        ['kefir', 'yoghurt', 'cheese', 'kombucha', 'miso'].forEach(renderGutCheck);
     }
 
     window.onload = function() {
