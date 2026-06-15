@@ -1,270 +1,994 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a1520">
-<title>Health Coach</title>
-<style>
-:root {
-  --bg: #0a1520;
-  --surface: #111e2e;
-  --surface2: #172438;
-  --surface3: #1d2f47;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #dde6f0;
-  --text2: #8fa8c0;
-  --text3: #4d6a85;
-  --green: #3aaa7a;
-  --green-dim: rgba(58,170,122,0.12);
-  --green-border: rgba(58,170,122,0.28);
-  --blue: #4a9ede;
-  --blue-dim: rgba(74,158,222,0.12);
-  --blue-border: rgba(74,158,222,0.28);
-  --amber: #e8a84a;
-  --amber-dim: rgba(232,168,74,0.12);
-  --amber-border: rgba(232,168,74,0.28);
-  --purple: #9b72e8;
-  --purple-dim: rgba(155,114,232,0.12);
-  --purple-border: rgba(155,114,232,0.28);
-  --red: #e05c5c;
-  --red-dim: rgba(224,92,92,0.1);
-  --r: 14px;
-  --r-sm: 9px;
-}
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  max-width: 430px;
-  margin: 0 auto;
-  padding-bottom: 84px;
-  -webkit-font-smoothing: antialiased;
-}
-
-.header {
-  padding: 54px 20px 18px;
-  background: linear-gradient(180deg, #070f18 0%, transparent 100%);
-  position: sticky; top: 0; z-index: 50;
-}
-.header-row { display:flex; justify-content:space-between; align-items:flex-start; }
-.greeting { font-size:24px; font-weight:700; letter-spacing:-0.5px; }
-.date-sub { font-size:13px; color:var(--text2); margin-top:3px; }
-.af-streak {
-  background: var(--green-dim);
-  border: 1px solid var(--green-border);
-  border-radius:20px; padding:6px 12px;
-  font-size:13px; color:var(--green); font-weight:600;
-  white-space:nowrap;
-}
-
-.coach-banner {
-  margin: 0 20px 14px;
-  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
-  border: 1px solid var(--border2);
-  border-radius: var(--r);
-  padding: 14px 16px;
-  display: flex; gap: 12px; align-items: flex-start;
-}
-.coach-avatar {
-  width:38px; height:38px; border-radius:50%;
-  background: linear-gradient(135deg, var(--green), var(--blue));
-  display:flex; align-items:center; justify-content:center;
-  font-size:18px; flex-shrink:0;
-}
-.coach-msg { font-size:14px; color:var(--text); line-height:1.5; }
-.coach-label { font-size:11px; color:var(--green); font-weight:600; letter-spacing:0.5px; margin-bottom:4px; }
-
-.nav {
-  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
-  width:100%; max-width:430px;
-  background:rgba(10,21,32,0.97);
-  backdrop-filter:blur(24px);
-  border-top:1px solid var(--border);
-  display:grid; grid-template-columns:repeat(5,1fr);
-  padding:8px 0 22px; z-index:100;
-}
-.nav-btn {
-  display:flex; flex-direction:column; align-items:center; gap:3px;
-  background:none; border:none; cursor:pointer;
-  padding:6px 2px; color:var(--text3);
-  font-size:9px; font-weight:600; letter-spacing:0.4px; text-transform:uppercase;
-  transition:color 0.2s;
-}
-.nav-btn .ni { font-size:20px; line-height:1; }
-.nav-btn.active { color:var(--green); }
-
-.screen { display:none; padding:0 20px; }
-.screen.active { display:block; }
-
-.card {
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:16px; margin-bottom:12px;
-}
-.card-title {
-  font-size:11px; font-weight:700;
-  letter-spacing:0.9px; text-transform:uppercase;
-  color:var(--text3); margin-bottom:14px;
-}
-
-.score-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-.score-label { font-size:14px; color:var(--text); width:54px; flex-shrink:0; }
-.score-btns { display:flex; gap:5px; flex:1; }
-.score-btn {
-  flex:1; height:38px;
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:var(--r-sm); color:var(--text3);
-  font-size:15px; font-weight:600; cursor:pointer;
-  transition:all 0.15s;
-}
-.score-btn.sel-e { background:var(--green-dim); border-color:var(--green); color:var(--green); }
-.score-btn.sel-s { background:var(--blue-dim); border-color:var(--blue); color:var(--blue); }
-.score-btn.sel-g { background:var(--purple-dim); border-color:var(--purple); color:var(--purple); }
-
-.field-label { font-size:12px; color:var(--text2); margin-bottom:6px; }
-.field-input {
-  width:100%; background:var(--surface2);
-  border:1px solid var(--border); border-radius:var(--r-sm);
-  padding:10px 12px; color:var(--text);
-  font-size:14px; font-family:inherit; resize:none; outline:none;
-  transition:border-color 0.2s;
-}
-.field-input:focus { border-color:var(--green); }
-.field-input::placeholder { color:var(--text3); }
-.field-wrap { margin-bottom:12px; }
-
-.btn-primary {
-  width:100%; padding:13px;
-  background:var(--green); border:none;
-  border-radius:var(--r-sm); color:#fff;
-  font-size:15px; font-weight:700; cursor:pointer;
-  letter-spacing:-0.2px; transition:opacity 0.2s;
-}
-.btn-primary:active { opacity:0.8; }
-.saved-msg { font-size:13px; color:var(--green); text-align:center; margin-top:10px; display:none; }
-
-.supp-row {
-  display:flex; align-items:center; gap:12px;
-  padding:11px 0; border-bottom:1px solid var(--border);
-  cursor:pointer; transition:opacity 0.15s;
-}
-.supp-row:last-child { border-bottom:none; padding-bottom:0; }
-.supp-row:first-child { padding-top:0; }
-.supp-icon {
-  width:38px; height:38px; border-radius:10px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:19px; flex-shrink:0;
-}
-.supp-info { flex:1; }
-.supp-name { font-size:14px; font-weight:500; }
-.supp-time { font-size:12px; color:var(--text3); margin-top:1px; }
-.supp-why { font-size:11px; color:var(--text2); margin-top:2px; }
-.supp-check {
-  width:26px; height:26px; border-radius:50%;
-  border:2px solid var(--border2);
-  display:flex; align-items:center; justify-content:center;
-  font-size:13px; flex-shrink:0; transition:all 0.2s;
-}
-.supp-check.done { background:var(--green); border-color:var(--green); color:#fff; }
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Coach</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .nav-btn { transition: all 0.1s; }
+    .nav-btn.active { background-color: #166534; color: white; border-color: #166534; }
+    .score-big { font-size: 4.5rem; line-height: 1; font-weight: 700; }
+    .card { transition: transform 0.1s ease; }
+    .card:hover { transform: translateY(-1px); }
+    .log-btn { transition: all 0.1s; }
+    .log-btn.selected { background-color: #166534; color: white; border-color: #166534; }
+    .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .tip-box { background: linear-gradient(145deg, #f0fdf4, #dcfce7); }
+  </style>
 </head>
-<body>
-
-<div class="header">
-  <div class="header-row">
-    <div>
-      <div class="greeting" id="greeting">Good morning</div>
-      <div class="date-sub" id="date-sub"></div>
-    </div>
-    <div class="af-streak" id="af-badge">🌱 Start</div>
-  </div>
-</div>
-
-<div class="coach-banner" id="coach-banner">
-  <div class="coach-avatar">🧬</div>
-  <div>
-    <div class="coach-label">Your health coach</div>
-    <div class="coach-msg" id="coach-msg">Loading your daily guidance…</div>
-  </div>
-</div>
-
-<!-- Morning Screen -->
-<div id="screen-morning" class="screen active">
-  <div class="card">
-    <div class="card-title">Morning check-in</div>
-    <!-- Original morning check-in content -->
-  </div>
-</div>
-
-<!-- Nutrition Screen -->
-<div id="screen-nutrition" class="screen">
-  <div class="inner-tabs">
-    <button class="inner-tab active" onclick="nutTab('meals')">Meals</button>
-    <button class="inner-tab" onclick="nutTab('gut')">Gut</button>
-    <button class="inner-tab" onclick="nutTab('water')">Water</button>
-    <button class="inner-tab" onclick="nutTab('principles')">Principles</button>
-  </div>
-
-  <!-- Gut Panel with Checklist -->
-  <div id="nut-gut" class="inner-panel">
-    <div class="card">
-      <div class="card-title">Probiotic Foods Checklist (tap to check)</div>
-      <div class="supp-row" onclick="toggleProbioticFood('kefir')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🥛</div>
-        <div class="supp-info">
-          <div class="supp-name">Kefir</div>
-          <div class="supp-time">150ml daily</div>
+<body class="bg-zinc-50 text-zinc-800">
+  <div class="max-w-xl mx-auto min-h-screen bg-white shadow-sm">
+    <!-- Header -->
+    <div class="px-6 pt-6 pb-4 border-b">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-semibold tracking-tight">Health Coach</h1>
+          <p class="text-sm text-emerald-700">Helping you maximise daily energy</p>
         </div>
-        <div class="supp-check" id="chk-kefir"></div>
-      </div>
-      <div class="supp-row" onclick="toggleProbioticFood('yoghurt')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🫙</div>
-        <div class="supp-info">
-          <div class="supp-name">Live Greek Yoghurt</div>
-          <div class="supp-time">Daily with breakfast</div>
+        <div class="text-right">
+          <div id="current-date" class="text-xs text-zinc-500"></div>
         </div>
-        <div class="supp-check" id="chk-yoghurt"></div>
-      </div>
-      <div class="supp-row" onclick="toggleProbioticFood('kombucha')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🍵</div>
-        <div class="supp-info">
-          <div class="supp-name">Kombucha</div>
-          <div class="supp-time">2-3 times per week</div>
-        </div>
-        <div class="supp-check" id="chk-kombucha"></div>
-      </div>
-      <div class="supp-row" onclick="toggleProbioticFood('miso')">
-        <div class="supp-icon" style="background:var(--purple-dim)">🍜</div>
-        <div class="supp-info">
-          <div class="supp-name">Miso</div>
-          <div class="supp-time">As needed</div>
-        </div>
-        <div class="supp-check" id="chk-miso"></div>
       </div>
     </div>
+
+    <!-- Navigation -->
+    <div class="flex border-b bg-white sticky top-0 z-10 flex-wrap">
+      <button onclick="showSection('dashboard')" id="nav-dashboard"
+              class="nav-btn flex-1 py-3 text-sm font-medium border-b-2 border-emerald-700 text-emerald-800 active">Dashboard</button>
+      <button onclick="showSection('log')" id="nav-log"
+              class="nav-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent hover:bg-zinc-50">Log Today</button>
+      <button onclick="showSection('nutrition')" id="nav-nutrition"
+              class="nav-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent hover:bg-zinc-50">Nutrition</button>
+      <button onclick="showSection('reminders')" id="nav-reminders"
+              class="nav-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent hover:bg-zinc-50">Reminders</button>
+      <button onclick="showSection('history')" id="nav-history"
+              class="nav-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent hover:bg-zinc-50">History</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section active p-6">
+      <div class="mb-6">
+        <div class="text-xs tracking-widest text-emerald-700 font-medium mb-1">TODAY'S ENERGY SCORE</div>
+        <div class="flex items-baseline gap-3">
+          <div id="energy-score" class="score-big text-emerald-800 tabular-nums">—</div>
+          <div class="text-xl text-emerald-600">/ 100</div>
+        </div>
+        <div id="score-message" class="mt-1 text-sm text-zinc-600"></div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <div class="card bg-white border rounded-2xl p-4">
+          <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+            <i class="fa-solid fa-bed"></i>
+            <span>SLEEP</span>
+          </div>
+          <div id="sleep-summary" class="text-lg font-semibold text-zinc-800">—</div>
+        </div>
+        <div class="card bg-white border rounded-2xl p-4">
+          <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+            <i class="fa-solid fa-walking"></i>
+            <span>MOVEMENT</span>
+          </div>
+          <div id="movement-summary" class="text-lg font-semibold text-zinc-800">—</div>
+        </div>
+        <div class="card bg-white border rounded-2xl p-4" onclick="showSection('reminders')">
+          <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+            <i class="fa-solid fa-leaf"></i>
+            <span>GUT + SUPPLEMENTS</span>
+          </div>
+          <div id="gut-supps-summary" class="text-lg font-semibold text-zinc-800">—</div>
+          <div class="text-[10px] text-emerald-600 mt-0.5">Tap for reminders</div>
+        </div>
+        <div class="card bg-white border rounded-2xl p-4">
+          <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+            <i class="fa-solid fa-bolt"></i>
+            <span>RECOVERY</span>
+          </div>
+          <div id="recovery-summary" class="text-lg font-semibold text-emerald-700">—</div>
+        </div>
+      </div>
+
+      <!-- Quick Tip -->
+      <div class="tip-box border border-emerald-200 rounded-2xl p-4 text-sm">
+        <div class="font-medium text-emerald-800 mb-1 flex items-center gap-2">
+          <i class="fa-solid fa-lightbulb"></i> 
+          <span>Energy tip</span>
+        </div>
+        <div id="daily-tip" class="text-emerald-900 leading-snug"></div>
+      </div>
+
+      <!-- Quick Supplements Reminder on Dashboard -->
+      <div onclick="showSection('reminders')" class="mt-4 cursor-pointer border border-emerald-100 hover:border-emerald-300 rounded-2xl p-4 flex items-center justify-between text-sm">
+        <div>
+          <div class="font-medium">Supplements today</div>
+          <div id="dash-supps-status" class="text-xs text-emerald-700">Click to mark taken</div>
+        </div>
+        <div class="text-right">
+          <span id="dash-supps-count" class="font-semibold text-emerald-700"></span>
+          <span class="text-xs text-zinc-500">/4</span>
+          <i class="fa-solid fa-chevron-right ml-1 text-emerald-600"></i>
+        </div>
+      </div>
+
+      <button onclick="showSection('log')" 
+              class="mt-4 w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-medium rounded-2xl text-sm flex items-center justify-center gap-2">
+        <i class="fa-solid fa-plus"></i>
+        <span>Log today's info</span>
+      </button>
+    </div>
+
+    <!-- LOG SECTION -->
+    <div id="log" class="section p-6">
+      <div class="mb-5">
+        <h2 class="font-semibold text-xl">Log today</h2>
+        <p class="text-sm text-zinc-500">Quick answers = better energy insights</p>
+      </div>
+
+      <!-- Sleep -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-2">Sleep last night</label>
+        <div class="flex items-center gap-3 mb-2">
+          <input type="range" id="sleep-hours" min="4" max="10" step="0.5" value="7.5" 
+                 class="flex-1 accent-emerald-700" oninput="updateSleepHoursLabel()">
+          <div class="w-14 text-right font-medium tabular-nums">
+            <span id="sleep-hours-val">7.5</span>h
+          </div>
+        </div>
+        <div class="text-xs text-zinc-500 mb-1.5">Quality</div>
+        <div class="flex gap-2" id="quality-buttons">
+          <button type="button" onclick="selectQuality(this, 1)" class="log-btn flex-1 py-2 text-sm border rounded-2xl">Poor</button>
+          <button type="button" onclick="selectQuality(this, 2)" class="log-btn flex-1 py-2 text-sm border rounded-2xl">Fair</button>
+          <button type="button" onclick="selectQuality(this, 3)" class="log-btn flex-1 py-2 text-sm border rounded-2xl selected">Good</button>
+          <button type="button" onclick="selectQuality(this, 4)" class="log-btn flex-1 py-2 text-sm border rounded-2xl">Great</button>
+          <button type="button" onclick="selectQuality(this, 5)" class="log-btn flex-1 py-2 text-sm border rounded-2xl">Excellent</button>
+        </div>
+      </div>
+
+      <!-- Movement -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-2">Movement today</label>
+        <div class="grid grid-cols-2 gap-2" id="movement-buttons">
+          <button type="button" onclick="selectMovement(this, 'none')" class="log-btn py-3 text-sm border rounded-2xl">None</button>
+          <button type="button" onclick="selectMovement(this, 'light')" class="log-btn py-3 text-sm border rounded-2xl">Light (walk)</button>
+          <button type="button" onclick="selectMovement(this, 'moderate')" class="log-btn py-3 text-sm border rounded-2xl selected">Moderate (30-60 min)</button>
+          <button type="button" onclick="selectMovement(this, 'strong')" class="log-btn py-3 text-sm border rounded-2xl">Strong session</button>
+        </div>
+      </div>
+
+      <!-- Oily fish (your 3x per week principle) -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-2">Oily fish today? (salmon, sardines, mackerel — aim for ~3x/week)</label>
+        <div class="flex gap-2">
+          <button type="button" onclick="selectOilyFish(this, true)" id="of-yes"
+                  class="log-btn flex-1 py-2 text-sm border rounded-2xl">Yes</button>
+          <button type="button" onclick="selectOilyFish(this, false)" id="of-no"
+                  class="log-btn flex-1 py-2 text-sm border rounded-2xl selected">No</button>
+        </div>
+      </div>
+
+      <!-- Gut foods -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-2">Gut-friendly foods today (tick what you had)</label>
+        <div class="grid grid-cols-1 gap-1 text-sm" id="gut-foods">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- Supplements (also in the Reminders tab) -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-2">Supplements taken today</label>
+        <div class="grid grid-cols-1 gap-1 text-sm" id="supplements">
+          <!-- populated by JS -->
+        </div>
+        <div class="text-[10px] text-emerald-700 mt-1">You can also mark them quickly in the Reminders section.</div>
+      </div>
+
+      <!-- Alcohol-free (subtle energy framing) -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium mb-2">Was last night alcohol-free?</label>
+        <div class="flex gap-2">
+          <button type="button" onclick="selectAlcoholFree(this, true)" id="af-yes"
+                  class="log-btn flex-1 py-3 text-sm border rounded-2xl selected">Yes (0 drinks)</button>
+          <button type="button" onclick="selectAlcoholFree(this, false)" id="af-no"
+                  class="log-btn flex-1 py-3 text-sm border rounded-2xl">No, had some</button>
+        </div>
+        <div id="alcohol-note" class="mt-1.5 text-xs text-emerald-700"></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="showSection('dashboard')" 
+                class="flex-1 py-3 border rounded-2xl text-sm font-medium">Cancel</button>
+        <button onclick="saveTodayLog()" 
+                class="flex-1 py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-2xl text-sm font-medium">Save log</button>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="history" class="section p-6">
+      <h2 class="font-semibold text-xl mb-1">Your recent days</h2>
+      <p class="text-sm text-zinc-500 mb-4">See what helps your energy most</p>
+
+      <div id="history-list" class="space-y-2 mb-6 text-sm"></div>
+
+      <div class="bg-zinc-50 border rounded-2xl p-4 mb-4">
+        <div class="text-xs text-zinc-500">7-day average energy</div>
+        <div id="avg-score" class="text-3xl font-semibold text-emerald-800 tabular-nums">—</div>
+      </div>
+
+      <div id="observation" class="text-sm text-zinc-600 p-4 bg-white border rounded-2xl"></div>
+    </div>
+
+    <!-- NUTRITION SECTION: Healthy meal suggestions (gut + energy focused) -->
+    <div id="nutrition" class="section p-6">
+      <div class="mb-5">
+        <h2 class="font-semibold text-xl">Energy Meals</h2>
+        <p class="text-sm text-zinc-500">Built around the principles that work for you.</p>
+      </div>
+
+      <!-- Guiding Principles (from what you liked) -->
+      <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs">
+        <div class="font-medium text-emerald-800 mb-2">Your core principles for energy &amp; health</div>
+        <ul class="space-y-1 text-emerald-900">
+          <li>• Oily fish 3x per week (salmon, sardines, mackerel – great for omega-3 and liver)</li>
+          <li>• Colour on every plate (berries, greens, varied veg for gut polyphenols)</li>
+          <li>• Protein at every meal (keeps energy steady and supports muscle)</li>
+          <li>• Liver-friendly choices (easy on the liver, pairs well with milk thistle)</li>
+          <li>• Slow carbs, not no carbs (oats, beans, etc. for sustained energy + gut feed)</li>
+          <li>• Take supplements with fat (avocado, olive oil, nuts, or oily fish improves absorption)</li>
+          <li>• Alcohol is the biggest lever (biggest single impact on energy, gut, liver, recovery)</li>
+          <li>• Feed your gut daily (different plants + fermented foods every day)</li>
+        </ul>
+      </div>
+
+      <!-- Breakfast -->
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-sun text-emerald-600"></i>
+          <span class="font-medium text-sm">Breakfast</span>
+        </div>
+        <div class="space-y-3" id="breakfast-suggestions">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Lunch -->
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-cloud-sun text-emerald-600"></i>
+          <span class="font-medium text-sm">Lunch</span>
+        </div>
+        <div class="space-y-3" id="lunch-suggestions">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Dinner -->
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-moon text-emerald-600"></i>
+          <span class="font-medium text-sm">Dinner</span>
+        </div>
+        <div class="space-y-3" id="dinner-suggestions">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="mt-6 text-xs text-zinc-500 bg-zinc-50 p-3 rounded-2xl">
+        These meals hit multiple principles: colour, protein, slow carbs, daily gut feed, liver friendly. 
+        Add a little healthy fat (olive oil, avocado, nuts) when you take your supplements. 
+        Alcohol-free evenings are the single biggest lever for energy, gut, and liver recovery.
+      </div>
+    </div>
+
+    <!-- REMINDERS SECTION: Supplements -->
+    <div id="reminders" class="section p-6">
+      <div class="mb-5">
+        <h2 class="font-semibold text-xl">Daily Supplements</h2>
+        <p class="text-sm text-zinc-500">Quick reminders to support your energy and recovery.</p>
+      </div>
+
+      <div id="supplement-reminders" class="space-y-3 mb-5">
+        <!-- Populated dynamically by JS from SUPPLEMENTS list -->
+      </div>
+
+      <button onclick="markAllSupplementsTaken()" 
+              class="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-2xl text-sm font-medium">
+        Mark all as taken today
+      </button>
+
+      <div class="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-xs text-emerald-800">
+        <strong>Why these matter for energy:</strong><br>
+        Omega 3 &amp; Magnesium support steady energy and calm recovery.<br>
+        Milk thistle helps liver function (important on social nights).<br>
+        Multi-vitamin fills daily gaps so your gut can do its best work.<br>
+        <span class="font-medium">Best practice:</span> Take your supplements with a source of fat (oily fish, avocado, olive oil, nuts, or aged cheese) for better absorption.
+      </div>
+    </div>
+
+    <div class="h-10"></div>
   </div>
-</div>
 
-<!-- Rest of the app would be here. This is the key part with the checklist. -->
+  <script>
+    // ========== SIMPLE DATA & HELPERS ==========
+    let logs = {}; // date string -> log object
+    let currentLog = {
+      sleepHours: 7.5,
+      sleepQuality: 3,
+      movement: 'moderate',
+      gutFoods: [],
+      supplements: [],
+      alcoholFree: true,
+      oilyFishToday: false   // supports your "oily fish 3x per week" principle
+    };
 
-<script>
-// Original script + new functions
-var TODAY = new Date().toISOString().split('T')[0];
+    // Approved gut foods (no kimchi/sauerkraut as requested)
+    const GUT_FOODS = [
+      "Banana or apple",
+      "Oats or beans",
+      "Berries",
+      "Garlic or onion",
+      "Leafy greens",
+      "Kefir, kombucha or miso",
+      "Aged cheese"
+    ];
 
-function toggleProbioticFood(key) {
-  alert('Checked ' + key + ' (checklist is working)');
-  // Full logic would be added here
-}
+    const SUPPLEMENTS = [
+      "Omega 3",
+      "Milk thistle",
+      "Multi-vitamin",
+      "Magnesium"
+    ];
 
-</script>
+    // Simple meal suggestions focused on approved gut foods + energy
+    // All suggestions aim for: colour on plate, protein, slow carbs, gut feed daily, liver friendly
+    // Oily fish examples for ~3x/week target. Note to add fat when taking supplements.
+    const MEAL_SUGGESTIONS = {
+      breakfast: [
+        {
+          title: "Oats + Berries + Protein Bowl",
+          desc: "Oats with banana or berries + a protein source (e.g. Greek yogurt or kefir). Colour + slow carbs + protein for steady morning energy. Feeds gut daily.",
+          foods: ["Oats or beans", "Banana or apple", "Berries", "Kefir, kombucha or miso"]
+        },
+        {
+          title: "Kefir Smoothie with Colour",
+          desc: "Kefir blended with banana, berries and a handful of greens. Probiotic + polyphenols (colour) + protein. Easy on liver.",
+          foods: ["Kefir, kombucha or miso", "Banana or apple", "Berries", "Leafy greens"]
+        },
+        {
+          title: "Aged Cheese + Apple + Slow Carb",
+          desc: "Aged cheese with apple and a small portion of oats or beans. Protein + colour + slow carb. Take your supplements with the cheese (fat helps absorption).",
+          foods: ["Aged cheese", "Banana or apple", "Oats or beans"]
+        }
+      ],
+      lunch: [
+        {
+          title: "Colourful Bean & Greens Bowl (add protein)",
+          desc: "Leafy greens + beans + garlic/onion + protein (tuna, eggs, or chicken). Colour on plate + protein + slow carbs + gut feed. Liver friendly.",
+          foods: ["Leafy greens", "Oats or beans", "Garlic or onion"]
+        },
+        {
+          title: "Oily Fish Salad (aim for 3x/week)",
+          desc: "Sardines or mackerel (oily fish) over leafy greens, beans, and berries. Big win for liver, omega-3, energy, and gut. Add olive oil or avocado (fat with supplements).",
+          foods: ["Leafy greens", "Oats or beans", "Berries"]
+        },
+        {
+          title: "Miso Greens Plate with Slow Carbs",
+          desc: "Miso with leafy greens, garlic, and beans or sweet potato. Fermented + colour + protein option + slow carb. Excellent daily gut feed.",
+          foods: ["Kefir, kombucha or miso", "Leafy greens", "Garlic or onion", "Oats or beans"]
+        }
+      ],
+      dinner: [
+        {
+          title: "Oily Fish + Colourful Veg (3x/week target)",
+          desc: "Baked salmon/sardines with lots of colourful greens, garlic/onion, and beans. Protein + colour + slow carbs + liver friendly. Alcohol-free night = even better recovery.",
+          foods: ["Leafy greens", "Garlic or onion", "Oats or beans"]
+        },
+        {
+          title: "Protein + Greens + Slow Carb Plate",
+          desc: "Grilled protein or aged cheese with big pile of colourful greens, garlic, and beans. Protein at every meal + colour + gut feed. Add healthy fat for your supplements.",
+          foods: ["Leafy greens", "Garlic or onion", "Oats or beans", "Aged cheese"]
+        },
+        {
+          title: "Miso Bowl with Berries Side",
+          desc: "Miso-based veg bowl with beans and a berry side. Fermented for gut + slow carbs + colour. Pairs perfectly with milk thistle.",
+          foods: ["Kefir, kombucha or miso", "Oats or beans", "Berries", "Leafy greens"]
+        }
+      ]
+    };
+
+    function todayKey() {
+      const d = new Date();
+      return d.toISOString().split('T')[0];
+    }
+
+    function formatDate(key) {
+      const d = new Date(key);
+      return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('healthcoach_logs');
+      if (saved) {
+        logs = JSON.parse(saved);
+      } else {
+        // Seed a few demo days so it feels useful on first open (realistic variety)
+        const base = new Date();
+        for (let i = 6; i >= 1; i--) {
+          const d = new Date(base);
+          d.setDate(d.getDate() - i);
+          const key = d.toISOString().split('T')[0];
+          logs[key] = createDemoLog(i);
+        }
+        saveToStorage();
+      }
+      // Make sure today exists
+      if (!logs[todayKey()]) {
+        logs[todayKey()] = { ...currentLog };
+      }
+    }
+
+    function createDemoLog(dayOffset) {
+      // Varied but realistic demo data
+      const alcoholFree = dayOffset % 3 !== 0; // mostly alcohol free for positive bias
+      return {
+        sleepHours: 6.5 + Math.random() * 2.5,
+        sleepQuality: 2 + Math.floor(Math.random() * 3),
+        movement: ['light', 'moderate', 'moderate', 'strong'][dayOffset % 4],
+        gutFoods: GUT_FOODS.slice(0, 3 + (dayOffset % 4)),
+        supplements: SUPPLEMENTS.slice(0, 2 + (dayOffset % 3)),
+        alcoholFree: alcoholFree,
+        oilyFishToday: dayOffset % 4 === 0   // occasional oily fish days for demo
+      };
+    }
+
+    function saveToStorage() {
+      localStorage.setItem('healthcoach_logs', JSON.stringify(logs));
+    }
+
+    // ========== SCORING (simple, energy-focused, easy to understand) ==========
+    function computeEnergyScore(log) {
+      if (!log) return 50;
+
+      let score = 40; // base
+
+      // Sleep is the foundation for energy
+      score += (log.sleepHours - 5) * 6;           // ~30 points max
+      score += (log.sleepQuality - 2) * 7;         // ~21 points
+
+      // Movement
+      const movePoints = { none: 0, light: 8, moderate: 16, strong: 22 };
+      score += movePoints[log.movement] || 10;
+
+      // Gut foods help your microbiome turn food into usable energy
+      score += log.gutFoods.length * 2.5;   // up to ~17.5
+
+      // Your supplements support energy systems (Omega3, magnesium etc.)
+      score += log.supplements.length * 3;  // up to 12
+
+      // Alcohol-free days = better recovery and energy the next day (subtle encouragement)
+      if (log.alcoholFree) {
+        score += 12;
+      } else {
+        score -= 6;
+      }
+
+      // Small bonus for oily fish (supports your "oily fish 3x per week" principle — omega-3, liver, sustained energy)
+      if (log.oilyFishToday) {
+        score += 5;
+      }
+
+      // Clamp to nice 0-100 range
+      score = Math.max(35, Math.min(98, Math.round(score)));
+      return score;
+    }
+
+    // ========== RENDER DASHBOARD ==========
+    function renderDashboard() {
+      const key = todayKey();
+      const log = logs[key] || currentLog;
+      const score = computeEnergyScore(log);
+
+      // Big score
+      document.getElementById('energy-score').textContent = score;
+
+      // Message
+      let msg = "Solid foundation today.";
+      if (score >= 85) msg = "Excellent energy day — keep doing this.";
+      else if (score >= 70) msg = "Good energy. Small tweaks can push it higher.";
+      else if (score < 55) msg = "Low energy day. Tomorrow is a fresh start.";
+      document.getElementById('score-message').textContent = msg;
+
+      // Summary cards
+      document.getElementById('sleep-summary').textContent = 
+        `${log.sleepHours}h • ${['Poor','Fair','Good','Great','Excellent'][log.sleepQuality-1]}`;
+
+      const moveLabels = { none: 'None', light: 'Light', moderate: 'Moderate', strong: 'Strong' };
+      document.getElementById('movement-summary').textContent = moveLabels[log.movement];
+
+      const gutCount = log.gutFoods.length;
+      const suppCount = log.supplements ? log.supplements.length : 0;
+      document.getElementById('gut-supps-summary').textContent = 
+        `${gutCount} gut foods • ${suppCount}/4 supps${log.oilyFishToday ? ' • oily fish' : ''}`;
+
+      // Update the quick supplements status bar on Dashboard
+      const suppCountEl = document.getElementById('dash-supps-count');
+      const suppStatusEl = document.getElementById('dash-supps-status');
+      if (suppCountEl) suppCountEl.textContent = suppCount;
+      if (suppStatusEl) {
+        if (suppCount === 4) {
+          suppStatusEl.textContent = "All done — great job!";
+        } else if (suppCount > 0) {
+          suppStatusEl.textContent = "Tap to finish the rest";
+        } else {
+          suppStatusEl.textContent = "Tap to mark taken";
+        }
+      }
+
+      const recText = log.alcoholFree ? 
+        'Alcohol-free night (great for energy)' : 
+        'Recovery day (alcohol-free nights usually give more energy)';
+      document.getElementById('recovery-summary').textContent = recText;
+
+      // Daily tip (rotates a little based on data) — built around your core principles
+      const tipEl = document.getElementById('daily-tip');
+      let tip = "Alcohol is your biggest lever: alcohol-free nights give the biggest lift to energy, gut recovery, and liver health.";
+      if (!log.alcoholFree) {
+        tip = "Alcohol is the biggest lever for your energy and gut. An alcohol-free night tonight will show up clearly tomorrow.";
+      } else if (gutCount >= 4) {
+        tip = "Feeding your gut daily with colour + variety (berries, greens, fermented) is paying off — keep it going.";
+      } else if (suppCount === 4) {
+        tip = "All supplements logged + good gut feed today. Add oily fish a few times this week for extra omega-3 and liver support.";
+      } else {
+        tip = "Protein + colour on the plate + slow carbs + fat with your supplements = reliable daily energy.";
+      }
+      tipEl.textContent = tip;
+
+      // Update current date
+      document.getElementById('current-date').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
+    // ========== LOG FORM ==========
+    function setupLogForm() {
+      // Sleep hours slider
+      const slider = document.getElementById('sleep-hours');
+      slider.oninput = () => {
+        document.getElementById('sleep-hours-val').textContent = slider.value;
+        currentLog.sleepHours = parseFloat(slider.value);
+      };
+
+      // Gut food checkboxes
+      const gutContainer = document.getElementById('gut-foods');
+      gutContainer.innerHTML = '';
+      GUT_FOODS.forEach(food => {
+        const id = 'gut-' + food.replace(/[^a-z0-9]/gi, '');
+        const div = document.createElement('div');
+        div.className = 'checkbox-label p-2 hover:bg-zinc-50 rounded-xl';
+        div.innerHTML = `
+          <input type="checkbox" id="${id}" class="accent-emerald-700">
+          <label for="${id}" class="text-sm">${food}</label>
+        `;
+        const cb = div.querySelector('input');
+        cb.onchange = () => {
+          if (cb.checked) {
+            if (!currentLog.gutFoods.includes(food)) currentLog.gutFoods.push(food);
+          } else {
+            currentLog.gutFoods = currentLog.gutFoods.filter(f => f !== food);
+          }
+        };
+        gutContainer.appendChild(div);
+      });
+
+      // Supplements checkboxes
+      const suppContainer = document.getElementById('supplements');
+      suppContainer.innerHTML = '';
+      SUPPLEMENTS.forEach(supp => {
+        const id = 'supp-' + supp.replace(/\s+/g, '');
+        const div = document.createElement('div');
+        div.className = 'checkbox-label p-2 hover:bg-zinc-50 rounded-xl';
+        div.innerHTML = `
+          <input type="checkbox" id="${id}" class="accent-emerald-700">
+          <label for="${id}" class="text-sm">${supp}</label>
+        `;
+        const cb = div.querySelector('input');
+        cb.onchange = () => {
+          if (cb.checked) {
+            if (!currentLog.supplements.includes(supp)) currentLog.supplements.push(supp);
+          } else {
+            currentLog.supplements = currentLog.supplements.filter(s => s !== supp);
+          }
+        };
+        suppContainer.appendChild(div);
+      });
+
+      // Alcohol free default
+      selectAlcoholFree(document.getElementById('af-yes'), true);
+
+      // Oily fish default (no)
+      const ofNo = document.getElementById('of-no');
+      const ofYes = document.getElementById('of-yes');
+      if (ofNo && ofYes) {
+        ofNo.classList.add('selected');
+        ofYes.classList.remove('selected');
+        currentLog.oilyFishToday = false;
+      }
+    }
+
+    function updateSleepHoursLabel() {
+      const val = document.getElementById('sleep-hours').value;
+      document.getElementById('sleep-hours-val').textContent = val;
+    }
+
+    function selectQuality(el, level) {
+      document.querySelectorAll('#quality-buttons button').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      currentLog.sleepQuality = level;
+    }
+
+    function selectMovement(el, type) {
+      document.querySelectorAll('#movement-buttons button').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      currentLog.movement = type;
+    }
+
+    function selectAlcoholFree(el, isFree) {
+      document.getElementById('af-yes').classList.remove('selected');
+      document.getElementById('af-no').classList.remove('selected');
+      el.classList.add('selected');
+
+      currentLog.alcoholFree = isFree;
+
+      const note = document.getElementById('alcohol-note');
+      if (isFree) {
+        note.textContent = "Alcohol-free nights help your body put more energy into recovery and gut balance.";
+        note.className = "mt-1.5 text-xs text-emerald-700";
+      } else {
+        note.textContent = "Still recovering well — alcohol-free nights often give an extra energy boost the next day.";
+        note.className = "mt-1.5 text-xs text-zinc-500";
+      }
+    }
+
+    function selectOilyFish(el, hadFish) {
+      document.getElementById('of-yes').classList.remove('selected');
+      document.getElementById('of-no').classList.remove('selected');
+      el.classList.add('selected');
+      currentLog.oilyFishToday = hadFish;
+    }
+
+    function loadCurrentIntoForm() {
+      const key = todayKey();
+      const saved = logs[key];
+      if (saved) currentLog = { ...saved };
+
+      // Sleep
+      document.getElementById('sleep-hours').value = currentLog.sleepHours;
+      document.getElementById('sleep-hours-val').textContent = currentLog.sleepHours;
+
+      // Quality buttons
+      document.querySelectorAll('#quality-buttons button').forEach((btn, idx) => {
+        btn.classList.toggle('selected', (idx + 1) === currentLog.sleepQuality);
+      });
+
+      // Movement
+      document.querySelectorAll('#movement-buttons button').forEach(btn => {
+        const type = btn.textContent.toLowerCase().includes('strong') ? 'strong' :
+                     btn.textContent.toLowerCase().includes('moderate') ? 'moderate' :
+                     btn.textContent.toLowerCase().includes('light') ? 'light' : 'none';
+        btn.classList.toggle('selected', type === currentLog.movement);
+      });
+
+      // Gut foods
+      document.querySelectorAll('#gut-foods input').forEach(cb => {
+        const label = cb.parentElement.textContent.trim();
+        cb.checked = currentLog.gutFoods.includes(label);
+      });
+
+      // Supplements
+      document.querySelectorAll('#supplements input').forEach(cb => {
+        const label = cb.parentElement.textContent.trim();
+        cb.checked = currentLog.supplements.includes(label);
+      });
+
+      // Alcohol free
+      const yesBtn = document.getElementById('af-yes');
+      const noBtn = document.getElementById('af-no');
+      yesBtn.classList.toggle('selected', currentLog.alcoholFree);
+      noBtn.classList.toggle('selected', !currentLog.alcoholFree);
+
+      const note = document.getElementById('alcohol-note');
+      if (currentLog.alcoholFree) {
+        note.textContent = "Alcohol-free nights help your body put more energy into recovery and gut balance.";
+        note.className = "mt-1.5 text-xs text-emerald-700";
+      } else {
+        note.textContent = "Still recovering well — alcohol-free nights often give an extra energy boost.";
+        note.className = "mt-1.5 text-xs text-zinc-500";
+      }
+
+      // Oily fish
+      const ofYes = document.getElementById('of-yes');
+      const ofNo = document.getElementById('of-no');
+      if (ofYes && ofNo) {
+        ofYes.classList.toggle('selected', !!currentLog.oilyFishToday);
+        ofNo.classList.toggle('selected', !currentLog.oilyFishToday);
+      }
+    }
+
+    function saveTodayLog() {
+      const key = todayKey();
+      logs[key] = { ...currentLog };
+      saveToStorage();
+
+      // Show success and go back to dashboard
+      showSection('dashboard');
+      renderDashboard();
+
+      // Small confirmation
+      const orig = document.getElementById('energy-score').textContent;
+      setTimeout(() => {
+        if (document.getElementById('dashboard').classList.contains('active')) {
+          // refresh in case
+          renderDashboard();
+        }
+      }, 300);
+    }
+
+    // ========== HISTORY ==========
+    function renderHistory() {
+      const container = document.getElementById('history-list');
+      container.innerHTML = '';
+
+      const sortedKeys = Object.keys(logs).sort().reverse().slice(0, 7);
+
+      if (sortedKeys.length === 0) {
+        container.innerHTML = '<div class="text-sm text-zinc-500">No history yet. Log a few days!</div>';
+        return;
+      }
+
+      let total = 0;
+      sortedKeys.forEach(key => {
+        const log = logs[key];
+        const score = computeEnergyScore(log);
+        total += score;
+
+        const div = document.createElement('div');
+        div.className = 'flex justify-between items-center bg-white border rounded-2xl px-4 py-3 text-sm';
+
+        const gut = log.gutFoods.length;
+        const supps = log.supplements.length;
+        const af = log.alcoholFree ? 'alcohol-free' : 'some drinks';
+        const fish = log.oilyFishToday ? ' + oily fish' : '';
+
+        div.innerHTML = `
+          <div>
+            <div class="font-medium">${formatDate(key)}</div>
+            <div class="text-xs text-zinc-500">${gut} gut foods • ${supps} supps • ${af}${fish}</div>
+          </div>
+          <div class="font-semibold tabular-nums text-emerald-700">${score}</div>
+        `;
+        container.appendChild(div);
+      });
+
+      // Average
+      const avg = Math.round(total / sortedKeys.length);
+      document.getElementById('avg-score').textContent = avg;
+
+      // Simple observation (energy focused) — references your key principles
+      const obs = document.getElementById('observation');
+      const alcoholFreeDays = sortedKeys.filter(k => logs[k].alcoholFree).length;
+      const highGutDays = sortedKeys.filter(k => logs[k].gutFoods.length >= 4).length;
+
+      let observationText = "Alcohol is the biggest lever: more alcohol-free days almost always equals noticeably higher energy and better gut scores.";
+      if (alcoholFreeDays >= 5) {
+        observationText = "Strong run of alcohol-free days — this is your biggest lever for energy, liver, and daily gut feeding.";
+      } else if (highGutDays >= 4) {
+        observationText = "Feeding your gut daily (colour + variety) is showing up in better energy. Aim for protein + slow carbs + colour on every plate.";
+      } else {
+        observationText = "Alcohol-free nights + daily gut feed + your supplements (with fat) + oily fish a few times a week are the combination that moves the needle most.";
+      }
+      obs.textContent = observationText;
+    }
+
+    // ========== NUTRITION: Render meal suggestions ==========
+    function renderNutrition() {
+      const meals = ['breakfast', 'lunch', 'dinner'];
+      const containers = {
+        breakfast: document.getElementById('breakfast-suggestions'),
+        lunch: document.getElementById('lunch-suggestions'),
+        dinner: document.getElementById('dinner-suggestions')
+      };
+
+      meals.forEach(mealType => {
+        const container = containers[mealType];
+        if (!container) return;
+        container.innerHTML = '';
+
+        MEAL_SUGGESTIONS[mealType].forEach(meal => {
+          const card = document.createElement('div');
+          card.className = 'bg-white border rounded-2xl p-4 text-sm';
+          card.innerHTML = `
+            <div class="font-medium mb-1">${meal.title}</div>
+            <div class="text-zinc-600 text-xs mb-3 leading-snug">${meal.desc}</div>
+            <button class="text-xs px-3 py-1.5 border border-emerald-700 text-emerald-700 rounded-2xl hover:bg-emerald-50">Add these foods to today's log</button>
+          `;
+          const btn = card.querySelector('button');
+          btn.onclick = () => {
+            addMealFoodsToLog(meal.foods);
+            // Give feedback
+            btn.textContent = 'Added!';
+            setTimeout(() => {
+              if (btn) btn.textContent = 'Add these foods to today\'s log';
+            }, 1200);
+          };
+          container.appendChild(card);
+        });
+      });
+    }
+
+    function addMealFoodsToLog(foodsToAdd) {
+      const key = todayKey();
+      if (!logs[key]) logs[key] = { ...currentLog };
+      
+      foodsToAdd.forEach(food => {
+        if (!currentLog.gutFoods.includes(food)) {
+          currentLog.gutFoods.push(food);
+        }
+      });
+      
+      logs[key] = { ...currentLog };
+      saveToStorage();
+      
+      // Refresh dashboard if visible + log form if open
+      if (document.getElementById('dashboard').classList.contains('active')) {
+        renderDashboard();
+      }
+      if (document.getElementById('log').classList.contains('active')) {
+        loadCurrentIntoForm();
+      }
+    }
+
+    // ========== REMINDERS: Supplement tracking ==========
+    function renderReminders() {
+      const container = document.getElementById('supplement-reminders');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const key = todayKey();
+      const todayLog = logs[key] || currentLog;
+      const taken = todayLog.supplements || [];
+
+      SUPPLEMENTS.forEach(supp => {
+        const isTaken = taken.includes(supp);
+
+        const div = document.createElement('div');
+        div.className = `flex items-start gap-3 p-4 border rounded-2xl ${isTaken ? 'bg-emerald-50 border-emerald-200' : 'bg-white'}`;
+
+        div.innerHTML = `
+          <div class="pt-0.5">
+            <input type="checkbox" class="accent-emerald-700 w-4 h-4" ${isTaken ? 'checked' : ''}>
+          </div>
+          <div class="flex-1">
+            <div class="font-medium flex items-center gap-2">
+              ${supp}
+              ${isTaken ? '<span class="text-xs px-2 py-0.5 bg-emerald-200 text-emerald-700 rounded">Taken ✓</span>' : ''}
+            </div>
+            <div class="text-xs text-zinc-600 mt-0.5">
+              ${getSupplementBenefit(supp)}
+            </div>
+          </div>
+        `;
+
+        const checkbox = div.querySelector('input');
+        checkbox.onchange = () => {
+          const key = todayKey();
+          if (!logs[key]) logs[key] = { ...currentLog };
+
+          if (checkbox.checked) {
+            if (!currentLog.supplements.includes(supp)) currentLog.supplements.push(supp);
+          } else {
+            currentLog.supplements = currentLog.supplements.filter(s => s !== supp);
+          }
+
+          logs[key] = { ...currentLog };
+          saveToStorage();
+
+          // Refresh the reminders view and dashboard
+          renderReminders();
+          if (document.getElementById('dashboard').classList.contains('active')) {
+            renderDashboard();
+          }
+        };
+
+        container.appendChild(div);
+      });
+    }
+
+    function getSupplementBenefit(supp) {
+      const benefits = {
+        "Omega 3": "Supports brain clarity and steady all-day energy.",
+        "Milk thistle": "Helps your liver process everything (great backup on any social nights).",
+        "Multi-vitamin": "Fills the small gaps so your body and gut have what they need.",
+        "Magnesium": "Calms the nervous system and supports deep recovery + better sleep."
+      };
+      return benefits[supp] || "Helps maintain consistent energy levels.";
+    }
+
+    function markAllSupplementsTaken() {
+      const key = todayKey();
+      if (!logs[key]) logs[key] = { ...currentLog };
+
+      currentLog.supplements = [...SUPPLEMENTS]; // all four
+      logs[key] = { ...currentLog };
+      saveToStorage();
+
+      renderReminders();
+      if (document.getElementById('dashboard').classList.contains('active')) {
+        renderDashboard();
+      }
+      if (document.getElementById('log').classList.contains('active')) {
+        loadCurrentIntoForm();
+      }
+    }
+
+    // ========== NAV / SECTION SWITCHING ==========
+    function showSection(name) {
+      // Hide all
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      // Show target
+      document.getElementById(name).classList.add('active');
+
+      // Update nav
+      document.querySelectorAll('[id^="nav-"]').forEach(btn => btn.classList.remove('active', 'border-emerald-700', 'text-emerald-800'));
+      const activeNav = document.getElementById('nav-' + name);
+      if (activeNav) activeNav.classList.add('active', 'border-emerald-700', 'text-emerald-800');
+
+      if (name === 'dashboard') renderDashboard();
+      if (name === 'history') renderHistory();
+      if (name === 'log') {
+        loadCurrentIntoForm();
+      }
+      if (name === 'nutrition') {
+        renderNutrition();
+      }
+      if (name === 'reminders') {
+        renderReminders();
+      }
+    }
+
+    // ========== INIT ==========
+    function init() {
+      loadData();
+
+      // Set up the log form controls
+      setupLogForm();
+
+      // Set current date display
+      document.getElementById('current-date').textContent = 
+        new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+
+      // Start on dashboard
+      showSection('dashboard');
+      renderDashboard();
+
+      // Make sure today's log is loaded into the form behind the scenes
+      const today = todayKey();
+      if (logs[today]) currentLog = { ...logs[today] };
+    }
+
+    // Boot the app
+    window.onload = init;
+
+    // For curious beginners: open browser console and type HealthCoach.reset() to clear data
+    window.HealthCoach = {
+      reset: () => {
+        localStorage.removeItem('healthcoach_logs');
+        location.reload();
+      }
+    };
+  </script>
 </body>
 </html>
