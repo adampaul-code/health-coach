@@ -245,6 +245,12 @@
         color: var(--purple);
     }
 
+    .score-btn.sel-c {
+        background: var(--amber-dim);
+        border-color: var(--amber);
+        color: var(--amber);
+    }
+
     .field-label {
         font-size: 12px;
         color: var(--text2);
@@ -445,6 +451,18 @@
         color: var(--amber);
     }
 
+    .af-btn.sel-sf-yes {
+        background: var(--blue-dim);
+        border-color: var(--blue);
+        color: var(--blue);
+    }
+
+    .af-btn.sel-sf-no {
+        background: var(--amber-dim);
+        border-color: var(--amber);
+        color: var(--amber);
+    }
+
     .drink-tip {
         background: var(--amber-dim);
         border: 1px solid var(--amber-border);
@@ -460,7 +478,7 @@
     .metrics-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 12px;
     }
 
@@ -468,12 +486,6 @@
         background: var(--surface2);
         border-radius: var(--r-sm);
         padding: 14px 12px;
-    }
-
-    .metric-val {
-        font-size: 28px;
-        font-weight: 700;
-        letter-spacing: -0.8px;
     }
 
     .metric-label {
@@ -1048,6 +1060,17 @@
                 </div>
             </div>
             <div style="font-size:11px;color:var(--text3);margin:-6px 0 12px 72px;">1 = bloating/discomfort · 5 = settled</div>
+            <div class="score-row">
+                <div class="score-label">Clarity</div>
+                <div class="score-btns">
+                    <button class="score-btn" onclick="score('c',1)" id="c1">1</button>
+                    <button class="score-btn" onclick="score('c',2)" id="c2">2</button>
+                    <button class="score-btn" onclick="score('c',3)" id="c3">3</button>
+                    <button class="score-btn" onclick="score('c',4)" id="c4">4</button>
+                    <button class="score-btn" onclick="score('c',5)" id="c5">5</button>
+                </div>
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin:-6px 0 12px 72px;">1 = foggy/groggy · 5 = sharp and clear (like today)</div>
             <div class="field-wrap">
                 <div class="field-label">Today's priority</div>
                 <textarea class="field-input" id="intention" rows="2" placeholder="What needs your best thinking today?"></textarea>
@@ -1332,6 +1355,20 @@
                     </button>
                 </div>
                 <div class="drink-tip" id="drink-tip">Tonight: prioritise your magnesium, dim screens earlier than usual. Alcohol suppresses deep sleep — your morning energy score tomorrow will reflect it.</div>
+                <div class="field-label" style="margin-top:4px;">Screens off before 9pm tonight?</div>
+                <div class="af-grid" style="margin-bottom:14px;">
+                    <button class="af-btn" id="sf-yes" onclick="setScreenFree(true)">
+                        <span class="af-ico">📵</span>
+                        Yes, screens off
+                    </button>
+                    <button class="af-btn" id="sf-no" onclick="setScreenFree(false)">
+                        <span class="af-ico">📱</span>
+                        Still using screens
+                    </button>
+                </div>
+                <div id="screen-tip" style="display:none;background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--blue);line-height:1.55;margin-bottom:12px;">
+                        You noticed clearer thinking this morning after removing screens earlier. That was your own body proving it works. Keep it going tonight.
+                      </div>
                 <div class="field-wrap">
                     <div class="field-label">One thing that went well</div>
                     <textarea class="field-input" id="went-well" rows="2" placeholder="Even small wins matter…"></textarea>
@@ -1364,6 +1401,65 @@
             <div class="card">
                 <div class="card-title">Why sleep matters most for you</div>
                 <div style="font-size:13px;color:var(--text2);line-height:1.6;">With spina bifida-related fatigue, deep sleep is where neurological repair happens, growth hormone is released, and the glymphatic system clears inflammatory waste from your brain. Poor sleep directly worsens brain fog, compensation fatigue, and your body's ability to benefit from your supplement stack. Magnesium, no alcohol, cool room, dark environment, and consistent sleep and wake times are your four biggest levers.</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Sleep hygiene — your personal rules</div>
+                <div class="principle-row">
+                    <div class="principle-icon">📵</div>
+                    <div>
+                        <div class="principle-title">Screens off by 9pm — you proved this works</div>
+                        <div class="principle-desc">You woke up noticeably clearer after removing screens earlier. Blue light suppresses melatonin for 2–3 hours after exposure. Your brain can't distinguish phone light from daylight — it stops producing the sleep hormone you need for deep, restorative sleep.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-icon">🌡️</div>
+                    <div>
+                        <div class="principle-title">Cool room — 17–19°C</div>
+                        <div class="principle-desc">Your core body temperature must drop 1–2°C to trigger deep sleep. A cool room accelerates this. Open a window, use a lighter duvet, or use a fan. This is one of the most underrated sleep interventions.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-icon">⏰</div>
+                    <div>
+                        <div class="principle-title">Consistent wake time — more important than bedtime</div>
+                        <div class="principle-desc">Your circadian rhythm anchors to your wake time, not your sleep time. Getting up at the same time every day — including weekends — is the single most powerful thing you can do for sleep quality. Even after a poor night, resist the lie-in.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-icon">🌑</div>
+                    <div>
+                        <div class="principle-title">Dark room — blackout if possible</div>
+                        <div class="principle-desc">Even small amounts of light through eyelids suppress melatonin. Blackout blinds or a sleep mask make a measurable difference. Cover any LED standby lights in the bedroom.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-icon">☕</div>
+                    <div>
+                        <div class="principle-title">Caffeine cut-off — 1pm at the latest</div>
+                        <div class="principle-desc">Caffeine blocks adenosine — your brain's sleep pressure chemical. With a 5–6 hour half-life, a 3pm coffee still has 50% of its caffeine in your system at 9pm. Earlier than you think.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-icon">🛁</div>
+                    <div>
+                        <div class="principle-title">Warm shower 45–60 mins before bed</div>
+                        <div class="principle-desc">Paradoxically, a warm shower helps you sleep by accelerating the body temperature drop afterwards. As you cool down post-shower, your brain registers the drop and deepens sleep pressure. More effective than most sleep supplements.</div>
+                    </div>
+                </div>
+                <div class="principle-row">
+                    <div class="principle-icon">💊</div>
+                    <div>
+                        <div class="principle-title">Magnesium timing matters</div>
+                        <div class="principle-desc">Take magnesium 60 minutes before your target sleep time — not just before you get into bed. It needs time to absorb and begin promoting GABA activity, which is what calms the nervous system for deep sleep.</div>
+                    </div>
+                </div>
+                <div class="principle-row" style="border-bottom:none;">
+                    <div class="principle-icon">🧠</div>
+                    <div>
+                        <div class="principle-title">Tomorrow's list — out of your head</div>
+                        <div class="principle-desc">The evening priority field in your check-in is designed for this. Writing tomorrow's one priority down offloads it from working memory, reducing the mental churn that delays sleep onset. Don't skip it.</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1408,7 +1504,9 @@
         e: 0,
         s: 0,
         g: 0,
-        af: null
+        c: 0,
+        af: null,
+        sf: null
     };
     var D = {
         entries: [],
@@ -1965,7 +2063,9 @@
     "The alcohol-free streak isn't about restriction — it's about data. Your energy scores will show the difference clearly within two weeks.",
     "Cruciferous vegetables three times this week — broccoli, kale, or Brussels sprouts. They activate the same liver detox pathways your milk thistle supports.",
     "Your magnesium before bed is working on sleep depth, not just sleep onset. Give it 6–8 weeks before judging its full effect.",
-    "Check your omega-3 label: the number that matters is combined EPA+DHA, not total fish oil weight. Aim for 2g+ daily."
+    "Check your omega-3 label: the number that matters is combined EPA+DHA, not total fish oil weight. Aim for 2g+ daily.",
+    "You noticed clearer thinking after removing screens earlier last night. That's your glymphatic system doing its job — it clears brain waste during deep sleep. Screens delay the deep sleep you need most.",
+    "Screens off by 9pm tonight. Your clarity score tomorrow will show the difference — you've already proved it works once."
     ];
 
     // ── SLEEP ROUTINE ──
@@ -2085,12 +2185,12 @@
     // ── SCORE ──
     function score(type, val) {
         st[type] = val;
-        var prefix = type === 'e' ? 'e' : type === 's' ? 's' : 'g';
-        var cls = type === 'e' ? 'sel-e' : type === 's' ? 'sel-s' : 'sel-g';
+        var prefix = type === 'e' ? 'e' : type === 's' ? 's' : type === 'g' ? 'g' : 'c';
+        var cls = type === 'e' ? 'sel-e' : type === 's' ? 'sel-s' : type === 'g' ? 'sel-g' : 'sel-c';
         for (var i = 1; i <= 5; i++) {
             var b = document.getElementById(prefix + i);
             if (b) {
-                b.classList.remove('sel-e', 'sel-s', 'sel-g');
+                b.classList.remove('sel-e', 'sel-s', 'sel-g', 'sel-c');
                 if (i === val)
                     b.classList.add(cls);
             }
@@ -2108,6 +2208,8 @@
         entry.sleep = st.s;
         if (st.g)
             entry.gut = st.g;
+        if (st.c)
+            entry.clarity = st.c;
         entry.intention = document.getElementById('intention').value.trim();
         persist();
         document.getElementById('m-saved').style.display = 'block';
@@ -2169,6 +2271,13 @@
     }
 
     // ── SAVE EVENING ──
+    function setScreenFree(val) {
+        st.sf = val;
+        document.getElementById('sf-yes').classList.toggle('sel-sf-yes', val === true);
+        document.getElementById('sf-no').classList.toggle('sel-sf-no', val === false);
+        document.getElementById('screen-tip').style.display = val === true ? 'block' : 'none';
+    }
+
     function saveEvening() {
         if (st.af === null) {
             alert('Please log whether today was alcohol-free.');
@@ -2176,6 +2285,8 @@
         }
         var entry = getEntry(TODAY);
         entry.af = st.af;
+        if (typeof st.sf !== 'undefined' && st.sf !== null)
+            entry.screenFree = st.sf;
         entry.wentWell = document.getElementById('went-well').value.trim();
         entry.tomorrow = document.getElementById('tomorrow').value.trim();
         persist();
@@ -2221,6 +2332,15 @@
         var avgG = withG.slice(0, 7).length ? (withG.slice(0, 7).reduce(function(s, e) {
             return s + e.gut;
         }, 0) / withG.slice(0, 7).length).toFixed(1) : '—';
+        var withC = entries.filter(function(e) {
+            return e.clarity;
+        });
+        var avgC = withC.slice(0, 7).length ? (withC.slice(0, 7).reduce(function(s, e) {
+            return s + e.clarity;
+        }, 0) / withC.slice(0, 7).length).toFixed(1) : '—';
+        var sfCount = entries.slice(0, 7).filter(function(e) {
+            return e.screenFree === true;
+        }).length;
         var afDays = withAF.slice(0, 7).filter(function(e) {
             return e.af;
         }).length;
@@ -2252,9 +2372,9 @@
             var dd = new Date(e.date + 'T12:00:00');
             var lbl = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dd.getDay()] + ' ' + dd.getDate();
             var afHtml = typeof e.af !== 'undefined' ? (e.af ? '<span class="hist-af-y">AF ✓</span>' : '<span class="hist-af-n">🍷</span>') : '';
-            histHtml += '<div class="hist-item"><div class="hist-date">' + lbl + '</div><div class="hist-row">' + (e.energy ? '<span class="hist-score">⚡ ' + e.energy + '/5</span>' : '') + (e.sleep ? '<span class="hist-score">😴 ' + e.sleep + '/5</span>' : '') + (e.gut ? '<span class="hist-score">🦠 ' + e.gut + '/5</span>' : '') + afHtml + '</div>' + (e.intention ? '<div class="hist-intent">' + e.intention + '</div>' : '') + '</div>';
+            histHtml += '<div class="hist-item"><div class="hist-date">' + lbl + '</div><div class="hist-row">' + (e.energy ? '<span class="hist-score">⚡ ' + e.energy + '/5</span>' : '') + (e.sleep ? '<span class="hist-score">😴 ' + e.sleep + '/5</span>' : '') + (e.gut ? '<span class="hist-score">🦠 ' + e.gut + '/5</span>' : '') + (e.clarity ? '<span class="hist-score">✨ ' + e.clarity + '/5</span>' : '') + (e.screenFree === true ? '<span style="font-size:12px;color:var(--blue)">📵</span>' : e.screenFree === false ? '<span style="font-size:12px;color:var(--amber)">📱</span>' : '') + afHtml + '</div>' + (e.intention ? '<div class="hist-intent">' + e.intention + '</div>' : '') + '</div>';
         });
-        var html = '<div class="metrics-grid"><div class="metric-card"><div class="metric-val" style="color:var(--green)">' + avgE + '</div><div class="metric-label">Avg energy (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--blue)">' + avgS + '</div><div class="metric-label">Avg sleep (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--purple)">' + avgG + '</div><div class="metric-label">Avg gut (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--green)">' + streak + '</div><div class="metric-label">AF streak</div></div></div>';
+        var html = '<div class="metrics-grid"><div class="metric-card"><div class="metric-val" style="color:var(--green)">' + avgE + '</div><div class="metric-label">Avg energy (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--blue)">' + avgS + '</div><div class="metric-label">Avg sleep (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--purple)">' + avgG + '</div><div class="metric-label">Avg gut (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--amber)">' + avgC + '</div><div class="metric-label">Clarity (7d)</div></div><div class="metric-card"><div class="metric-val" style="color:var(--green)">' + streak + '</div><div class="metric-label">AF streak</div></div><div class="metric-card"><div class="metric-val" style="color:var(--blue)">' + sfCount + '</div><div class="metric-label">Screen-free (7d)</div></div></div>';
         html += '<div class="card"><div class="card-title">Last 7 days</div><div style="padding-top:4px;">' + chartHtml + '</div></div>';
         if (insight)
             html += '<div class="insight-card"><div class="insight-label">Pattern insight</div><div class="insight-text">' + insight + '</div></div>';
@@ -2324,6 +2444,29 @@
                 }, 0) / poorGut.length;
                 if ((gAvg - pAvg) > 0.4)
                     return 'On days when your gut feels settled, your energy scores are ' + (gAvg - pAvg).toFixed(1) + ' points higher. Your gut-brain axis is clearly active.';
+            }
+        }
+        // Screen-free vs clarity
+        var withSF = entries.filter(function(e) {
+            return typeof e.screenFree !== 'undefined' && e.clarity;
+        });
+        if (withSF.length >= 4) {
+            var sfYes = withSF.filter(function(e) {
+                return e.screenFree === true;
+            });
+            var sfNo = withSF.filter(function(e) {
+                return e.screenFree === false;
+            });
+            if (sfYes.length >= 2 && sfNo.length >= 2) {
+                var sfAvg = sfYes.reduce(function(s, e) {
+                    return s + e.clarity;
+                }, 0) / sfYes.length;
+                var noAvg = sfNo.reduce(function(s, e) {
+                    return s + e.clarity;
+                }, 0) / sfNo.length;
+                var diff = (sfAvg - noAvg).toFixed(1);
+                if (diff > 0.3)
+                    return 'Your morning clarity is ' + diff + ' points higher on days after a screen-free evening. You already noticed this yourself — now the data is confirming it.';
             }
         }
         if (entries.length < 4)
@@ -2526,6 +2669,10 @@
                 score('s', entry.sleep);
             if (entry.gut)
                 score('g', entry.gut);
+            if (entry.clarity)
+                score('c', entry.clarity);
+            if (typeof entry.screenFree !== 'undefined')
+                setScreenFree(entry.screenFree);
             var intEl = document.getElementById('intention');
             if (intEl && entry.intention)
                 intEl.value = entry.intention;
